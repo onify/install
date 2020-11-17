@@ -249,7 +249,7 @@ spec:
     - match: Host(`<agent-server_host>`)
       kind: Rule
       services:
-      - name: agent-server
+      - name: onify-agent-server
         port: 8080
       middlewares:
       - name: httpsredirectscheme
@@ -268,7 +268,7 @@ spec:
     - match: Host(`<api_public_host>`)
       kind: Rule
       services:
-      - name: api
+      - name: onify-api
         port: 8181
       middlewares:
       - name: httpsredirectscheme
@@ -287,7 +287,7 @@ spec:
     - match: Host(`<app_public_host>`)
       kind: Rule
       services:
-      - name: app
+      - name: onify-app
         port: 3000
       middlewares:
       - name: httpsredirectscheme
