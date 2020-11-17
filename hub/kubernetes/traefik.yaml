@@ -251,9 +251,8 @@ spec:
       services:
       - name: onify-agent-server
         port: 8080
-      middlewares:
-      - name: httpsredirectscheme
-        namespace: traefik
+  tls:
+    certResolver: default
 ---
 # Api
 apiVersion: traefik.containo.us/v1alpha1
@@ -270,9 +269,8 @@ spec:
       services:
       - name: onify-api
         port: 8181
-      middlewares:
-      - name: httpsredirectscheme
-        namespace: traefik
+  tls:
+    certResolver: default
 ---
 # App
 apiVersion: traefik.containo.us/v1alpha1
@@ -289,6 +287,5 @@ spec:
       services:
       - name: onify-app
         port: 3000
-      middlewares:
-      - name: httpsredirectscheme
-        namespace: traefik
+  tls:
+    certResolver: default
