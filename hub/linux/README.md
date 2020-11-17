@@ -5,7 +5,7 @@ Installing Onify Hub on a single Linux machine requires [Microk8s](https://micro
 
 # Preparations
 
-1. Install snapd
+1. Install snapd (if not installed)
 2. Install Microk8s
 3. Install Onify 
 
