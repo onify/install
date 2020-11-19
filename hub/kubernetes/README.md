@@ -69,10 +69,11 @@ Secrets are saved in base64 format
 
 ## Environment variables for hub-app
 
-* `ONIFY_API_TOKEN` - from secret `api_token` used by app for backend communication
-* `ONIFY_API_URL_EXTERNAL` - External url for frontend API calls, should use `api_public_host`
-* `ONIFY_API_URL_INTERNAL` - Internal url for backend connection with API, defaults to `http://api:8181/api/v2`, depends on exposed api service
+* `ONIFY_api_adminToken` - from secret `api_token` used by app for backend communication
+* `ONIFY_api_internalUrl` - Internal url for backend connection with API, defaults to `http://api:8181/api/v2`, depends on exposed api service
+* `ONIFY_api_externalUrl` - External url for frontend API calls, set to relativeUrl `/api/v2`, or use `api_public_host`
 * `ONIFY_logging_logLevel`: Optional, log level, one of `fatal`, `error`, `warn`, `info`, `debug`, or `trace`, defaults to `warn`
+* `ONIFY_disableAdminEndpoints`: Optional boolean flag to disable all admin endpoints in hub-app, defaults to false
 
 # Elasticsearch
 

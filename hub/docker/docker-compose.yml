@@ -81,9 +81,12 @@ services:
       - api
     environment:
       NODE_ENV: development
-      ONIFY_API_TOKEN: ${APP_API_TOKEN}
-      ONIFY_API_URL_INTERNAL: http://linked-api:8181/api/v2
-      ONIFY_API_URL_EXTERNAL: http://localhost:8181/api/v2
+      ENV_PREFIX: ONIFY_
+      INTERPRET_CHAR_AS_DOT: _
+      ONIFY_api_adminToken: ${APP_API_TOKEN}
+      ONIFY_api_internalUrl: http://linked-api:8181/api/v2
+      ONIFY_api_externalUrl: /api/v2
+      ONIFY_disableAdminEndpoints: false
     links:
       - api:linked-api
     ports:

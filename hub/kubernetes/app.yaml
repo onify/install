@@ -6,6 +6,17 @@ type: Opaque
 data:
   api_token: <base64-encoded-string> # "Bearer api_token_secret_base64"
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onify-app-config
+data:
+  NODE_ENV: production # environment
+  ENV_PREFIX: ONIFY_
+  INTERPRET_CHAR_AS_DOT: _
+  ONIFY_api_internalUrl: http://onify-api:8181/api/v2
+  ONIFY_api_externalUrl: /api/v2
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,22 +40,17 @@ spec:
       containers:
       - name: app
         image: eu.gcr.io/onify-images/hub/app:2
+        envFrom:
+        - configMapRef:
+            name: onify-app-config
         env:
-        - name: NODE_ENV
-          value: production
-        - name: ENV_PREFIX
-          value: ONIFY_
-        - name: INTERPRET_CHAR_AS_DOT
-          value: _
-        - name: ONIFY_api_internalUrl
-          value: http://onify-api:8181/api/v2
-        - name: ONIFY_api_externalUrl
-          value: /api/v2
         - name: ONIFY_api_adminToken
-           valueFrom:
+          valueFrom:
             secretKeyRef:
               name: onify-app-secrets
               key: api_token
+        - name: ONIFY_disableAdminEndpoints
+          value: "false"
         ports:
         - name: app
           containerPort: 3000
