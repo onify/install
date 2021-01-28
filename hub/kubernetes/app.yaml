@@ -44,7 +44,7 @@ spec:
         - configMapRef:
             name: onify-app-config
         env:
-        - name: ONIFY_api_adminToken
+        - name: ONIFY_api_admintoken
           valueFrom:
             secretKeyRef:
               name: onify-app-secrets

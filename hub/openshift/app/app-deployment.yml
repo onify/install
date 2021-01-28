@@ -32,7 +32,7 @@ spec:
           value: http://onify-api:8181/api/v2
         - name: ONIFY_api_externalUrl
           value: /api/v2
-        - name: ONIFY_api_adminToken
+        - name: ONIFY_api_admintoken
            valueFrom:
             secretKeyRef:
               name: onify-app-secrets
