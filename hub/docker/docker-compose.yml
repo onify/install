@@ -15,7 +15,7 @@ x-shared-api-variables: &shared-api-variables
   ONIFY_adminUser_password: ${ADMIN_PASSWORD}
   ONIFY_adminUser_email: hello@onify.co
   ONIFY_apiTokens_app_secret: ${API_APP_SECRET}
-  ONIFY_logging_logLevel: info
+  ONIFY_logging_logLevel: debug
   ONIFY_resources_baseDir: ./data/resources
   ONIFY_resources_tempDir: ./data/storage
   ONIFY_websockets_agent_url: ws://linked-agent-server:8080/hub
@@ -37,8 +37,8 @@ services:
       interval: 10s
       timeout: 5m
       retries: 30
-    # volumes: # uncomment to persist elasticsearch data
-    #   - ./tmp/elasticsearch:/usr/share/elasticsearch/data
+    volumes: 
+       - ./tmp/elasticsearch:/usr/share/elasticsearch/data
   agent-server:
     image: eu.gcr.io/onify-images/hub/agent-server:2 # replace :2 with desired semver version
     environment:
@@ -83,10 +83,10 @@ services:
       NODE_ENV: development
       ENV_PREFIX: ONIFY_
       INTERPRET_CHAR_AS_DOT: _
-      ONIFY_api_adminToken: ${APP_API_TOKEN}
+      ONIFY_api_admintoken: ${APP_API_TOKEN}
       ONIFY_api_internalUrl: http://linked-api:8181/api/v2
       ONIFY_api_externalUrl: /api/v2
-      ONIFY_disableAdminEndpoints: false
+      ONIFY_disableAdminEndpoints: "false"
     links:
       - api:linked-api
     ports:
