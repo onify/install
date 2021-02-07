@@ -1,0 +1,147 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  labels:
+    app: onify
+    tier: persistance
+  annotations:
+    volume.alpha.kubernetes.io/storage-class: rabbitmq
+spec:
+  storageClassName: rabbitmq
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  persistentVolumeReclaimPolicy: Recycle
+  hostPath:
+    path: "/var/lib/rabbitmq/mnesia"
+    type: Directory
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  labels:
+    app: onify
+    tier: persistance
+spec:
+  storageClassName: rabbitmq
+  selector:
+    matchLabels:
+      app: onify
+      tier: persistance
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    type: LoadBalancer
+spec:
+  type: NodePort
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+     nodePort: 31672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+     nodePort: 30672
+  selector:
+    app: rabbitmq
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq-lb
+  labels:
+    app: rabbitmq
+    type: LoadBalancer
+spec:
+  type: LoadBalancer
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+  selector:
+    app: rabbitmq
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    matchLabels:
+     app: rabbitmq
+  serviceName: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: rabbitmq-autocluster
+        image: pivotalrabbitmq/rabbitmq-autocluster
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+        livenessProbe:
+          exec:
+            command: ["rabbitmqctl", "status"]
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command: ["rabbitmqctl", "status"]
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        imagePullPolicy: Always
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          - name: RABBITMQ_NODENAME
+            value: "rabbit@$(MY_POD_IP)"
+          - name: AUTOCLUSTER_TYPE
+            value: "k8s"
+          - name: AUTOCLUSTER_DELAY
+            value: "10"
+          - name: K8S_ADDRESS_TYPE
+            value: "ip"
+          - name: AUTOCLUSTER_CLEANUP
+            value: "true"
+          - name: CLEANUP_WARN_ONLY
+            value: "false"
+        volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq/mnesia
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq
+      restartPolicy: Always
