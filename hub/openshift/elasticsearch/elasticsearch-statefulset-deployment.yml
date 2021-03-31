@@ -26,7 +26,7 @@ spec:
             memory: "1000Mi"
           limits:
             memory: "2000Mi"
-        image: elasticsearch:7.6.2
+        image: elasticsearch:7.11.1
         env:
         - name: ES_JAVA_OPTS
           value: -Xms1g -Xmx1g 
