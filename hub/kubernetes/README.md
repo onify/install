@@ -3,7 +3,7 @@ Install Onify Hub in Kubernetes
 
 # Images
 
-To retreive images from the onify registry you need a registry secret. Contact Onify at hello@onify.co for this.
+To retreive images from the onify registry you need a registry secret. Contact Onify at support@onify.co for this.
 
 * hub/api
 * hub/app
@@ -27,7 +27,7 @@ To retreive images from the onify registry you need a registry secret. Contact O
 
 # Docker registry credentials
 
-Registry credentials, contact Onify at hello@onify.co to get your `keyfile.json`.
+Registry credentials, contact Onify at support@onify.co to get your `keyfile.json`.
 
 Run the following command to add your registry secret:
 
@@ -36,7 +36,7 @@ kubectl create secret docker-registry onify-regcred \
   --docker-server=eu.gcr.io \
   --docker-username=_json_key \
   --docker-password="$(cat keyfile.json)" \
-  --docker-email=hello@onify.co
+  --docker-email=admin@onify.local
 ```
 
 # Secrets

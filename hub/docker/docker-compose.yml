@@ -8,12 +8,12 @@ x-shared-api-variables: &shared-api-variables
   ONIFY_db_elasticsearch_host: http://linked-elasticsearch:9200
   ONIFY_db_indexPrefix: dev
   ONIFY_client_secret: ${API_CLIENT_SECRET}
-  ONIFY_client_code: ${API_CLIENT_CODE} # Contact Onify at hello@onify.co for this
-  ONIFY_client_instance: ${API_CLIENT_INSTANCE} # Contact Onify at hello@onify.co for this
-  ONIFY_initialLicense: ${LICENSE} # Contact Onify at hello@onify.co for license
+  ONIFY_client_code: ${API_CLIENT_CODE} # Contact Onify at support@onify.co for this
+  ONIFY_client_instance: ${API_CLIENT_INSTANCE} # Contact Onify at support@onify.co for this
+  ONIFY_initialLicense: ${LICENSE} # Contact Onify at support@onify.co for license
   ONIFY_adminUser_username: admin
   ONIFY_adminUser_password: ${ADMIN_PASSWORD}
-  ONIFY_adminUser_email: hello@onify.co
+  ONIFY_adminUser_email: admin@onify.local
   ONIFY_apiTokens_app_secret: ${API_APP_SECRET}
   ONIFY_logging_logLevel: debug
   ONIFY_resources_baseDir: ./data/resources

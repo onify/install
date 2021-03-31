@@ -55,7 +55,7 @@ spec:
         - --providers.kubernetescrd
         - --log.Level=INFO
         - --certificatesResolvers.default.acme.storage=acme.json
-        - --certificatesResolvers.default.acme.email=hello@onify.co
+        - --certificatesResolvers.default.acme.email=admin@onify.local
         - --certificatesResolvers.default.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
         #- --certificatesResolvers.default.acme.caServer=https://acme-v02.api.letsencrypt.org/directory
         - --certificatesResolvers.default.acme.tlschallenge

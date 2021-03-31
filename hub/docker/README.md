@@ -5,7 +5,7 @@ Use docker compose to run your hub.
 
 # Images
 
-To retreive images from the onify registry you need a registry secret. Contact Onify at hello@onify.co for this.
+To retreive images from the onify registry you need a registry secret. Contact Onify at support@onify.co for this.
 
 * hub/api
 * hub/app
@@ -19,7 +19,7 @@ Some preparations is required to run in docker.
 
 Onify images are stored in a registry that requires authentication to access.
 
-Request your image registry secret from hello@onify.co and save as `keyfile.json` in this directory
+Request your image registry secret from support@onify.co and save as `keyfile.json` in this directory
 
 Login to docker with:
 
@@ -75,7 +75,7 @@ Add the result as `APP_API_TOKEN` value in `.env` file where the value is surrou
 
 ### Onify License
 
-Get your Onify docker license key, client code, and client instance from hello@onify.co and add them as values for `LICENSE`, `API_CLIENT_CODE`, and `API_CLIENT_INSTANCE` the `.env` file.
+Get your Onify docker license key, client code, and client instance from support@onify.co and add them as values for `LICENSE`, `API_CLIENT_CODE`, and `API_CLIENT_INSTANCE` the `.env` file.
 
 ```
 ADMIN_PASSWORD=<administrator password>

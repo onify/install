@@ -12,7 +12,7 @@ data:
   ONIFY_client_instance: <client_instance>
   ONIFY_evaluationLicense: <license>
   ONIFY_adminUser_username: admin
-  ONIFY_adminUser_email: hello@onify.co
+  ONIFY_adminUser_email: admin@onify.local
   ONIFY_resources_baseDir: /usr/share/onify/resources
   ONIFY_resources_tempDir: /usr/share/onify/temp_resources
   ONIFY_websockets_agent_url: ws://agent-server:8080/hub
