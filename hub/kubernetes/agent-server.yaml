@@ -15,7 +15,7 @@ spec:
       - name: onify-regcred
      containers:
      - name: agent-server
-       image: eu.gcr.io/onify-images/hub/agent-server:2
+       image: eu.gcr.io/onify-images/hub/agent-server:latest # IMPORTANT: replace with desired version
        env:
          - name: log_level
            value: "2"

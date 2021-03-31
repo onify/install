@@ -20,7 +20,7 @@ spec:
       - name: onify-regcred
       containers:
       - name: api
-        image: eu.gcr.io/onify-images/hub/api:2
+        image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
         envFrom:
         - configMapRef:
             name: onify-api-config

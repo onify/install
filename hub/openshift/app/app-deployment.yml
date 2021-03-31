@@ -20,7 +20,7 @@ spec:
       - name: onify-regcred
       containers:
       - name: app
-        image: eu.gcr.io/onify-images/hub/app:2
+        image: eu.gcr.io/onify-images/hub/app:latest # IMPORTANT: replace with desired version
         env:
         - name: NODE_ENV
           value: production

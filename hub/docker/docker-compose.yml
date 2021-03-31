@@ -40,7 +40,7 @@ services:
     volumes: 
        - ./tmp/elasticsearch:/usr/share/elasticsearch/data
   agent-server:
-    image: eu.gcr.io/onify-images/hub/agent-server:2 # replace :2 with desired semver version
+    image: eu.gcr.io/onify-images/hub/agent-server:latest # IMPORTANT: replace with desired version
     environment:
       hub_version: v2
       log_level: "2"
@@ -48,7 +48,7 @@ services:
     ports:
       - 8080:8080
   api:
-    image: eu.gcr.io/onify-images/hub/api:2 # replace :2 with desired semver version
+    image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
     restart: always
     depends_on:
       - elasticsearch
@@ -62,7 +62,7 @@ services:
       - agent-server:linked-agent-server
     volumes: *shared-api-volumes
   worker:
-    image: eu.gcr.io/onify-images/hub/api:2 # replace :2 with desired semver version
+    image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
     command: worker
     restart: always
     depends_on:
@@ -75,7 +75,7 @@ services:
       - agent-server:linked-agent-server
     volumes: *shared-api-volumes
   app:
-    image: eu.gcr.io/onify-images/hub/app:2
+    image: eu.gcr.io/onify-images/hub/app:latest # IMPORTANT: replace with desired version
     restart: always
     depends_on:
       - api
