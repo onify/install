@@ -15,6 +15,6 @@ Install Onify
 # Onify Agent
 
 - Install in [Docker](/agent/docker)
-- Install in Linux (Coming soon)
-- Install in Windows (Coming soon)
+- Install in [Linux](https://support.onify.co/docs/install#onify-agent)
+- Install in [Windows](https://support.onify.co/docs/install#onify-agent)
 
