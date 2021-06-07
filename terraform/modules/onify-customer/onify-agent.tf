@@ -18,7 +18,7 @@ DOCKER
   type = "kubernetes.io/dockerconfigjson"
 }
 
-resource "kubernetes_deployment" "onify-agent" {
+resource "kubernetes_stateful_set" "onify-agent" {
   metadata {
     name      = "onify-agent-${var.client}"
     namespace = var.client
@@ -28,7 +28,8 @@ resource "kubernetes_deployment" "onify-agent" {
     }
   }
   spec {
-    replicas = var.deployment_replicas
+    service_name = "onify-agent-${var.client}"
+    replicas     = var.deployment_replicas
     selector {
       match_labels = {
         app  = "onify-agent-${var.client}"

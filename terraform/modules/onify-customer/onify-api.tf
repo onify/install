@@ -45,22 +45,7 @@ resource "kubernetes_stateful_set" "onify-api" {
   }
   spec {
     service_name = "onify-api-${var.client}"
-    volume_claim_template {
-      metadata {
-        name      = "data-onify-api-${var.client}"
-        namespace = var.client
-      }
-      spec {
-        access_modes = ["ReadWriteOnce"]
-        #storage_class_name = "standard" //could be "ssd" for faster disks
-        resources {
-          requests = {
-            storage = "10Gi"
-          }
-        }
-      }
-    }
-    replicas = var.deployment_replicas
+    replicas     = var.deployment_replicas
     selector {
       match_labels = {
         app  = "onify-api-${var.client}"
@@ -131,10 +116,6 @@ resource "kubernetes_stateful_set" "onify-api" {
               }
             }
           }
-          volume_mount {
-            name       = "data-onify-api-${var.client}"
-            mount_path = "/usr/share/onify"
-          }
         }
       }
     }
@@ -162,6 +143,33 @@ resource "kubernetes_service" "onify-api" {
     }
     type = "NodePort"
     //type = "LoadBalancer"
+  }
+  depends_on = [kubernetes_namespace.client]
+}
+
+
+resource "kubernetes_ingress" "onify-api" {
+  wait_for_load_balancer = false
+  metadata {
+    name      = "onify-api-${var.client}"
+    namespace = var.client
+
+    # labels = {
+    #   loadbalancer = "traefik"
+    # }
+  }
+  spec {
+    rule {
+      host = "onify-api-${var.client}.onify.io"
+      http {
+        path {
+          backend {
+            service_name = "onify-api-${var.client}"
+            service_port = 8181
+          }
+        }
+      }
+    }
   }
   depends_on = [kubernetes_namespace.client]
 }

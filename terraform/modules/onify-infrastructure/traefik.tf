@@ -79,7 +79,7 @@ resource "kubernetes_deployment" "traefik" {
         service_account_name             = "traefik-ingress-controller"
         termination_grace_period_seconds = 60
         container {
-          image = "traefik:${var.traefik_version}"
+          image = "traefik:${var.traefik-image_version}"
           name  = "traefik-ingress-lb"
           port {
             name           = "web"
@@ -106,7 +106,7 @@ resource "kubernetes_deployment" "traefik" {
             "--entrypoints.web.Address=:80",
             "--entryPoints.websecure.address=:443",
             "--providers.kubernetesingress",
-            "--log.Level=DEBUG",
+            "--log.Level=${var.traefik-log_level}",
             "--certificatesResolvers.default.acme.storage=acme.json",
             "--certificatesResolvers.default.acme.email=hello@onify.io",
             "--certificatesResolvers.default.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory",

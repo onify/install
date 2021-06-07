@@ -9,22 +9,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
   }
   spec {
     service_name = "onify-worker-${var.client}"
-    volume_claim_template {
-      metadata {
-        name      = "data-onify-worker-${var.client}"
-        namespace = var.client
-      }
-      spec {
-        access_modes = ["ReadWriteOnce"]
-        #storage_class_name = "standard" //could be "ssd" for faster disks
-        resources {
-          requests = {
-            storage = "10Gi"
-          }
-        }
-      }
-    }
-    replicas = var.deployment_replicas
+    replicas     = var.deployment_replicas
     selector {
       match_labels = {
         app  = "onify-worker-${var.client}"
@@ -62,7 +47,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
           args = ["worker"]
           env_from {
             config_map_ref {
-              name = "${var.client}-onify-worker"
+              name = "${var.client}-onify-api"
             }
           }
           env {
@@ -73,7 +58,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_adminUser_password"
             value_from {
               secret_key_ref {
-                name = "${var.client}-onify-worker"
+                name = "${var.client}-onify-api"
                 key  = "admin_password"
               }
             }
@@ -82,7 +67,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_apiTokens_app_secret"
             value_from {
               secret_key_ref {
-                name = "${var.client}-onify-worker"
+                name = "${var.client}-onify-api"
                 key  = "app_token_secret"
               }
             }
@@ -91,18 +76,15 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_client_secret"
             value_from {
               secret_key_ref {
-                name = "${var.client}-onify-worker"
+                name = "${var.client}-onify-api"
                 key  = "client_secret"
               }
             }
           }
-          volume_mount {
-            name       = "data-onify-worker-${var.client}"
-            mount_path = "/usr/share/onify"
-          }
         }
       }
     }
+
   }
   depends_on = [kubernetes_namespace.client]
 }
