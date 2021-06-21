@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "docker-onify" {
   metadata {
     name      = "onify-regcred"
-    namespace = var.client
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
   }
 
   data = {
@@ -20,27 +20,27 @@ DOCKER
 
 resource "kubernetes_stateful_set" "onify-agent" {
   metadata {
-    name      = "onify-agent-${var.client}"
-    namespace = var.client
+    name      = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
     labels = {
-      app  = "onify-agent-${var.client}"
-      name = var.client
+      app  = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+      name = "${var.onify_client_code}-${var.onify_instance}"
     }
   }
   spec {
-    service_name = "onify-agent-${var.client}"
+    service_name = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "onify-agent-${var.client}"
-        task = "onify-agent-${var.client}"
+        app  = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+        task = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "onify-agent-${var.client}"
-          task = "onify-agent-${var.client}"
+          app  = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+          task = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
         }
       }
       spec {
@@ -93,16 +93,16 @@ resource "kubernetes_stateful_set" "onify-agent" {
 
 resource "kubernetes_service" "onify-agent" {
   metadata {
-    name      = "onify-agent-${var.client}"
-    namespace = var.client
+    name      = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
     }
   }
   spec {
     selector = {
-      app  = "onify-agent-${var.client}"
-      task = "onify-agent-${var.client}"
+      app  = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+      task = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
     }
     port {
       name     = "onify-agent"
@@ -111,6 +111,33 @@ resource "kubernetes_service" "onify-agent" {
     }
     type = "NodePort"
     //type = "LoadBalancer"
+  }
+  depends_on = [kubernetes_namespace.client]
+}
+
+resource "kubernetes_ingress" "onify-agent" {
+  count                  = var.onify-agent_external ? 1 : 0
+  wait_for_load_balancer = false
+  metadata {
+    name      = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
+
+    # labels = {
+    #   loadbalancer = "traefik"
+    # }
+  }
+  spec {
+    rule {
+      host = "${var.onify_client_code}-${var.onify_instance}-agent-server.onify.io"
+      http {
+        path {
+          backend {
+            service_name = "${var.onify_client_code}-${var.onify_instance}-onify-agent"
+            service_port = 8181
+          }
+        }
+      }
+    }
   }
   depends_on = [kubernetes_namespace.client]
 }

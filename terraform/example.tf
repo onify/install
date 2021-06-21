@@ -63,8 +63,8 @@ module "onify-client-example" {
   onify-api_app_token      = base64encode("Bearer password")
   onify-api_client_secret  = base64encode("password")
   onify-api_secret         = base64encode("password")
-  onify-api_client_code    = "client"
-  onify-api_instance       = "demo_something"
+  onify_client_code    = "client"
+  onify_instance       = "demo123"
   onify-api_license        = "licenseXXXX"
   onify-api_version        = "latest"
   onify-worker_version     = "latest"

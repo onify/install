@@ -1,5 +1,6 @@
 ### EXAMPLE SSD STORAGE CLASS
 resource "kubernetes_storage_class" "ssd" {
+  count = var.elasticsearch_address != null ? 0 : 1
   metadata {
     name = "ssd"
   }
@@ -11,16 +12,17 @@ resource "kubernetes_storage_class" "ssd" {
 }
 
 resource "kubernetes_service" "elasticsearch" {
+  count = var.elasticsearch_address != null ? 0 : 1
   metadata {
-    name      = "${var.client}-elasticsearch"
-    namespace = var.client
+    name      = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
     labels = {
-      app = var.client
+      app = "${var.onify_client_code}-${var.onify_instance}"
     }
   }
   spec {
     selector = {
-      app = "${var.client}-elasticsearch"
+      app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
     }
     port {
       name     = "client"
@@ -40,11 +42,12 @@ resource "kubernetes_service" "elasticsearch" {
 
 
 resource "kubernetes_stateful_set" "elasticsearch" {
+  count = var.elasticsearch_address != null ? 0 : 1
   metadata {
-    name      = "${var.client}-elasticsearch"
-    namespace = var.client
+    name      = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+    namespace = "${var.onify_client_code}-${var.onify_instance}"
     labels = {
-      app = "${var.client}-elasticsearch"
+      app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
     }
   }
   spec {
@@ -53,14 +56,14 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     revision_history_limit = 5
     selector {
       match_labels = {
-        app = "${var.client}-elasticsearch"
+        app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
       }
     }
-    service_name = "${var.client}-elasticsearch"
+    service_name = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
     template {
       metadata {
         labels = {
-          app = "${var.client}-elasticsearch"
+          app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
         }
       }
       spec {
@@ -70,7 +73,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           run_as_non_root = true
         }
         container {
-          name  = "${var.client}-elasticsearch"
+          name  = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
           image = "docker.elastic.co/elasticsearch/elasticsearch-oss:7.6.2"
 
           port {
@@ -87,13 +90,30 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           }
           env {
             name  = "cluster.name"
-            value = "${var.client}-onify-elasticsearch"
+            value = "${var.onify_client_code}-${var.onify_instance}-onify-elasticsearch"
+          }
+          dynamic "env" {
+            for_each = var.elasticsearch_heapsize != null ? [1] : []
+            content {
+              name  = "ES_JAVA_OPTS"
+              value = "-Xms${var.elasticsearch_heapsize} -Xmx${var.elasticsearch_heapsize}"
+            }
           }
           volume_mount {
             name       = "data"
             mount_path = "/usr/share/elasticsearch/data"
           }
+          resources {
+            limits = {
+              cpu    = "10m"
+              memory = "10Mi"
+            }
 
+            requests = {
+              cpu    = "10m"
+              memory = "10Mi"
+            }
+          }
           # liveness_probe {
           #   http_get {
           #     path   = "/_cluster/health"
@@ -117,14 +137,14 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     volume_claim_template {
       metadata {
         name      = "data"
-        namespace = var.client
+        namespace = "${var.onify_client_code}-${var.onify_instance}"
       }
       spec {
         access_modes = ["ReadWriteOnce"]
         #storage_class_name = "standard" //could be "ssd" for faster disks
         resources {
           requests = {
-            storage = "10Gi"
+            storage = var.elasticsearch_disksize
           }
         }
       }
