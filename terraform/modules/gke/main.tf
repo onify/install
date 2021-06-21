@@ -10,8 +10,9 @@ locals {
 
 # GKE cluster
 resource "google_container_cluster" "primary" {
-  name     = "${var.name}-gke"
-  location = var.gce_region
+  name = "${var.name}-gke"
+  //location = var.gce_region
+  location = "${var.gce_region}-a"
 
   remove_default_node_pool = true
   initial_node_count       = 1
@@ -31,8 +32,9 @@ resource "google_container_cluster" "primary" {
 
 # Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
-  name       = "${google_container_cluster.primary.name}-node-pool"
-  location   = var.gce_region
+  name = "${google_container_cluster.primary.name}-node-pool"
+  //location = var.gce_region
+  location   = "${var.gce_region}-a"
   cluster    = google_container_cluster.primary.name
   node_count = var.gke_num_nodes
 
