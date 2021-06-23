@@ -1,26 +1,26 @@
 resource "kubernetes_stateful_set" "onify-worker" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
+    name      = "${var.onify_client_code}-${var.onify_instance}-worker"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
     labels = {
-      app  = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
-      name = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
+      app  = "${var.onify_client_code}-${var.onify_instance}-worker"
+      name = "${var.onify_client_code}-${var.onify_instance}-worker"
     }
   }
   spec {
-    service_name = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
+    service_name = "${var.onify_client_code}-${var.onify_instance}-worker"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
-        task = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
+        app  = "${var.onify_client_code}-${var.onify_instance}-worker"
+        task = "${var.onify_client_code}-${var.onify_instance}-worker"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
-          task = "${var.onify_client_code}-${var.onify_instance}-onify-worker"
+          app  = "${var.onify_client_code}-${var.onify_instance}-worker"
+          task = "${var.onify_client_code}-${var.onify_instance}-worker"
         }
       }
       spec {
@@ -47,7 +47,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
           args = ["worker"]
           env_from {
             config_map_ref {
-              name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+              name = "${var.onify_client_code}-${var.onify_instance}-api"
             }
           }
           env {
@@ -58,7 +58,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_adminUser_password"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "admin_password"
               }
             }
@@ -67,7 +67,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_apiTokens_app_secret"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "app_token_secret"
               }
             }
@@ -76,7 +76,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
             name = "ONIFY_client_secret"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "client_secret"
               }
             }

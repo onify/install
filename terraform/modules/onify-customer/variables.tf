@@ -53,16 +53,10 @@ variable "elasticsearch_disksize" {
     default = "10Gi" 
 }
 variable "elasticsearch_memory_limit" {
-    default = "10m"
-}
-variable "elasticsearch_cpu_limit" {
-    default = "10mi"
+    default = "1Gi"
 }
 variable "elasticsearch_memory_requests" {
-    default = "10m"
-}
-variable "elasticsearch_cpu_requests" {
-    default = "10m"
+    default = "1Gi"
 }
 variable "onify-api_memory_limit" {
     default = "10m"

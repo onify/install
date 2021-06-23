@@ -100,20 +100,17 @@ resource "kubernetes_stateful_set" "elasticsearch" {
             }
           }
           volume_mount {
-            name       = "data"
+            name       = "${var.onify_client_code}-${var.onify_instance}-data"
             mount_path = "/usr/share/elasticsearch/data"
           }
-          resources {
-            limits = {
-              cpu    = "10m"
-              memory = "10Mi"
-            }
-
-            requests = {
-              cpu    = "10m"
-              memory = "10Mi"
-            }
-          }
+          //resources {
+          //limits = {
+          //  memory = var.elasticsearch_memory_limit
+          //}
+          //requests = {
+          //  memory = var.elasticsearch_memory_requests
+          //}
+          //}
           # liveness_probe {
           #   http_get {
           #     path   = "/_cluster/health"
@@ -136,7 +133,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     }
     volume_claim_template {
       metadata {
-        name      = "data"
+        name      = "${var.onify_client_code}-${var.onify_instance}-data"
         namespace = "${var.onify_client_code}-${var.onify_instance}"
       }
       spec {

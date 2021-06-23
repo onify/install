@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "onify-api" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    name      = "${var.onify_client_code}-${var.onify_instance}-api"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
   }
   data = {
@@ -13,7 +13,7 @@ resource "kubernetes_secret" "onify-api" {
 
 resource "kubernetes_config_map" "onify-api" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    name      = "${var.onify_client_code}-${var.onify_instance}-api"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
   }
 
@@ -30,33 +30,33 @@ resource "kubernetes_config_map" "onify-api" {
     ONIFY_adminUser_email       = "admin@onify.local"
     ONIFY_resources_baseDir     = "/usr/share/onify/resources"
     ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
-    ONIFY_websockets_agent_url  = "ws://onify-agent-${var.onify_client_code}-${var.onify_instance}:8080/hub"
+    ONIFY_websockets_agent_url  = "ws://${var.onify_client_code}-${var.onify_instance}-agent:8080/hub"
   }
 }
 
 resource "kubernetes_stateful_set" "onify-api" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    name      = "${var.onify_client_code}-${var.onify_instance}-api"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
     labels = {
-      app  = "${var.onify_client_code}-${var.onify_instance}-onify-api"
-      name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+      app  = "${var.onify_client_code}-${var.onify_instance}-api"
+      name = "${var.onify_client_code}-${var.onify_instance}-api"
     }
   }
   spec {
-    service_name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    service_name = "${var.onify_client_code}-${var.onify_instance}-api"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${var.onify_client_code}-${var.onify_instance}-onify-api"
-        task = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+        app  = "${var.onify_client_code}-${var.onify_instance}-api"
+        task = "${var.onify_client_code}-${var.onify_instance}-api"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${var.onify_client_code}-${var.onify_instance}-onify-api"
-          task = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+          app  = "${var.onify_client_code}-${var.onify_instance}-api"
+          task = "${var.onify_client_code}-${var.onify_instance}-api"
         }
       }
       spec {
@@ -82,7 +82,7 @@ resource "kubernetes_stateful_set" "onify-api" {
           }
           env_from {
             config_map_ref {
-              name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+              name = "${var.onify_client_code}-${var.onify_instance}-api"
             }
           }
           env {
@@ -93,7 +93,7 @@ resource "kubernetes_stateful_set" "onify-api" {
             name = "ONIFY_adminUser_password"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "admin_password"
               }
             }
@@ -102,7 +102,7 @@ resource "kubernetes_stateful_set" "onify-api" {
             name = "ONIFY_apiTokens_app_secret"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "app_token_secret"
               }
             }
@@ -111,7 +111,7 @@ resource "kubernetes_stateful_set" "onify-api" {
             name = "ONIFY_client_secret"
             value_from {
               secret_key_ref {
-                name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+                name = "${var.onify_client_code}-${var.onify_instance}-api"
                 key  = "client_secret"
               }
             }
@@ -125,7 +125,7 @@ resource "kubernetes_stateful_set" "onify-api" {
 
 resource "kubernetes_service" "onify-api" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    name      = "${var.onify_client_code}-${var.onify_instance}-api"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
@@ -133,8 +133,8 @@ resource "kubernetes_service" "onify-api" {
   }
   spec {
     selector = {
-      app  = "${var.onify_client_code}-${var.onify_instance}-onify-api"
-      task = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+      app  = "${var.onify_client_code}-${var.onify_instance}-api"
+      task = "${var.onify_client_code}-${var.onify_instance}-api"
     }
     port {
       name     = "onify-api"
@@ -152,12 +152,13 @@ resource "kubernetes_ingress" "onify-api" {
   count                  = var.onify-api_external ? 1 : 0
   wait_for_load_balancer = false
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+    name      = "${var.onify_client_code}-${var.onify_instance}-api"
     namespace = "${var.onify_client_code}-${var.onify_instance}"
-
-    # labels = {
-    #   loadbalancer = "traefik"
-    # }
+    annotations = {
+      "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
+      "traefik.ingress.kubernetes.io/router.tls"              = "true"
+      "traefik.ingress.kubernetes.io/router.tls.certresolver" = "default"
+    }
   }
   spec {
     rule {
@@ -165,7 +166,7 @@ resource "kubernetes_ingress" "onify-api" {
       http {
         path {
           backend {
-            service_name = "${var.onify_client_code}-${var.onify_instance}-onify-api"
+            service_name = "${var.onify_client_code}-${var.onify_instance}-api"
             service_port = 8181
           }
         }
