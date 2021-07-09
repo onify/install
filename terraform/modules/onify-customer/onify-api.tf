@@ -120,7 +120,7 @@ resource "kubernetes_stateful_set" "onify-api" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.client]
+  ]
 }
 
 resource "kubernetes_service" "onify-api" {
@@ -144,7 +144,7 @@ resource "kubernetes_service" "onify-api" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
-  depends_on = [kubernetes_namespace.client]
+  ]
 }
 
 
@@ -173,5 +173,5 @@ resource "kubernetes_ingress" "onify-api" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.client]
+  ]
 }

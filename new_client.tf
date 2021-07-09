@@ -32,10 +32,10 @@ module "onify-client-ioforce" {
   onify-app_memory_requests    = "10m"
   onify-app_cpu_requests       = "10mi"
   //elasticsearch_address    = "http://elasticcloud.example.something:9200" //do not create elasticsearch
-  elasticsearch_memory_limit    = "10m"
-  elasticsearch_cpu_limit       = "10mi"
-  elasticsearch_memory_requests = "10m"
-  elasticsearch_cpu_requests    = "10mi"
+  //elasticsearch_memory_limit    = "10m"
+  //elasticsearch_cpu_limit       = "10mi"
+  //elasticsearch_memory_requests = "10m"
+  //elasticsearch_cpu_requests    = "10mi"
   //elasticsearch_heapsize        = "1g" // set ES_JAVA_OPTS
   elasticsearch_disksize = "10Gi"
 }

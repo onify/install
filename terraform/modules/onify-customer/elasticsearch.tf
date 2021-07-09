@@ -37,7 +37,6 @@ resource "kubernetes_service" "elasticsearch" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
-  depends_on = [kubernetes_namespace.client]
 }
 
 
