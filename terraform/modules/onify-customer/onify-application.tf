@@ -92,7 +92,6 @@ resource "kubernetes_stateful_set" "onify-app" {
       }
     }
   }
-  ]
 }
 
 resource "kubernetes_service" "onify-app" {
@@ -115,7 +114,6 @@ resource "kubernetes_service" "onify-app" {
     }
     type = "NodePort"
   }
-  ]
 }
 
 resource "kubernetes_ingress" "onify-app" {
@@ -142,5 +140,4 @@ resource "kubernetes_ingress" "onify-app" {
       }
     }
   }
-  ]
 }

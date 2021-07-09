@@ -88,7 +88,6 @@ resource "kubernetes_stateful_set" "onify-agent" {
       }
     }
   }
-  ]
 }
 
 resource "kubernetes_service" "onify-agent" {
@@ -112,7 +111,6 @@ resource "kubernetes_service" "onify-agent" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
-  ]
 }
 
 resource "kubernetes_ingress" "onify-agent" {
@@ -135,5 +133,4 @@ resource "kubernetes_ingress" "onify-agent" {
       }
     }
   }
-  ]
 }

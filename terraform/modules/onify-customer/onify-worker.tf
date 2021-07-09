@@ -86,5 +86,4 @@ resource "kubernetes_stateful_set" "onify-worker" {
     }
 
   }
-  ]
 }
