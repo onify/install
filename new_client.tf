@@ -11,7 +11,7 @@ module "onify-client-ioforce" {
   source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
   #source               = "./terraform/modules/onify-customer"
   gcr_registry_keyfile = "~/repos/onify/keyfile.json"
-  onify_client_code    = "ioforce"
+  onify_client_code    = "oni"
   onify_instance       = "demo1"
   //onify-agent_external     = true // creates ingress with external access
   onify-agent_version         = "latest"
