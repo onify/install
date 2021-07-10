@@ -1,3 +1,12 @@
+# # CAN ONLY BE USED IF MODULE GCS EXISTS
+terraform {
+  backend "gcs" {
+    bucket = "onify-demo-terraform"
+    prefix = "terraform/state/onify-client-ioforce"
+  }
+}
+
+
 module "onify-client-ioforce" {
   source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
   #source               = "./terraform/modules/onify-customer"
