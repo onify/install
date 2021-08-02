@@ -2,16 +2,15 @@
 terraform {
   backend "gcs" {
     bucket = "onify-demo-terraform"
-    prefix = "terraform/state/onify-client-ioforce"
+    prefix = "terraform/state/onify-client-acme"
   }
 }
 
-
-module "onify-client-ioforce" {
-  source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
-  #source               = "./terraform/modules/onify-customer"
-  gcr_registry_keyfile = "~/repos/onify/keyfile.json"
-  onify_client_code    = "oni"
+module "onify-client-acme" {
+  #source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
+  source               = "./terraform/modules/onify-customer"
+  gcr_registry_keyfile = "./keyfile.json"
+  onify_client_code    = "acme"
   onify_instance       = "demo1"
   //onify-agent_external     = true // creates ingress with external access
   onify-agent_version         = "latest"
@@ -20,11 +19,11 @@ module "onify-client-ioforce" {
   onify-agent_memory_requests = "10m"
   onify-agent_cpu_requests    = "10mi"
   //onify-api_external       = true // creates ingress with external access
-  onify-api_admin_password     = "XXX"
-  onify-api_app_token          = "XXX"
-  onify-api_client_secret      = "XXX"
-  onify-api_secret             = "XXX"
-  onify-api_license            = "XXX"
+  onify-api_admin_password     = "<ADMIN_PASSWORD>"
+  onify-api_app_token          = "<APP_API_TOKEN>"
+  onify-api_client_secret      = "<API_CLIENT_SECRET>"
+  onify-api_secret             = "<API_APP_SECRET>"
+  onify-api_license            = "<LICENSE>"
   onify-api_version            = "latest"
   onify-api_memory_limit       = "10m"
   onify-api_cpu_limit          = "10mi"
@@ -46,5 +45,5 @@ module "onify-client-ioforce" {
   //elasticsearch_memory_requests = "10m"
   //elasticsearch_cpu_requests    = "10mi"
   //elasticsearch_heapsize        = "1g" // set ES_JAVA_OPTS
-  elasticsearch_disksize = "10Gi"
+  elasticsearch_disksize = "20Gi"
 }
