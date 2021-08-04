@@ -15,7 +15,7 @@ resource "kubernetes_service" "elasticsearch" {
   count = var.elasticsearch_address != null ? 0 : 1
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.name
     labels = {
       app = "${var.onify_client_code}-${var.onify_instance}"
     }
