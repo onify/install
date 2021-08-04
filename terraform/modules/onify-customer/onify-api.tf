@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "onify-api" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-api"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
   data = {
     admin_password   = var.onify-api_admin_password
@@ -14,7 +14,7 @@ resource "kubernetes_secret" "onify-api" {
 resource "kubernetes_config_map" "onify-api" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-api"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
 
   data = {
@@ -37,7 +37,7 @@ resource "kubernetes_config_map" "onify-api" {
 resource "kubernetes_stateful_set" "onify-api" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-api"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
       app  = "${var.onify_client_code}-${var.onify_instance}-api"
       name = "${var.onify_client_code}-${var.onify_instance}-api"
@@ -125,7 +125,7 @@ resource "kubernetes_stateful_set" "onify-api" {
 resource "kubernetes_service" "onify-api" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-api"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
     }
@@ -151,7 +151,7 @@ resource "kubernetes_ingress" "onify-api" {
   wait_for_load_balancer = false
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-api"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
       "traefik.ingress.kubernetes.io/router.tls"              = "true"

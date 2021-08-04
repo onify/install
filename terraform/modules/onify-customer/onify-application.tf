@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "onify-app" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-app"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
   data = {
     api_token = var.onify-api_app_token
@@ -27,7 +27,7 @@ resource "kubernetes_config_map" "onify-app" {
 resource "kubernetes_stateful_set" "onify-app" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-app"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
       app  = "${var.onify_client_code}-${var.onify_instance}-app"
       name = "${var.onify_client_code}-${var.onify_instance}-app"
@@ -97,7 +97,7 @@ resource "kubernetes_stateful_set" "onify-app" {
 resource "kubernetes_service" "onify-app" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-app"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
     }
@@ -120,7 +120,7 @@ resource "kubernetes_ingress" "onify-app" {
   wait_for_load_balancer = false
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-app"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
       "traefik.ingress.kubernetes.io/router.tls"              = "true"

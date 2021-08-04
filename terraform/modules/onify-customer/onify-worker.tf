@@ -1,7 +1,7 @@
 resource "kubernetes_stateful_set" "onify-worker" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-worker"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
       app  = "${var.onify_client_code}-${var.onify_instance}-worker"
       name = "${var.onify_client_code}-${var.onify_instance}-worker"

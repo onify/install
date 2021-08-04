@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "docker-onify" {
   metadata {
     name      = "onify-regcred"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
 
   data = {
@@ -21,7 +21,7 @@ DOCKER
 resource "kubernetes_stateful_set" "onify-agent" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-agent"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
       app  = "${var.onify_client_code}-${var.onify_instance}-agent"
       name = "${var.onify_client_code}-${var.onify_instance}"
@@ -93,7 +93,7 @@ resource "kubernetes_stateful_set" "onify-agent" {
 resource "kubernetes_service" "onify-agent" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-agent"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
     }
@@ -118,7 +118,7 @@ resource "kubernetes_ingress" "onify-agent" {
   wait_for_load_balancer = false
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-agent"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
   spec {
     rule {
