@@ -7,6 +7,7 @@ resource "kubernetes_secret" "onify-app" {
     api_token = var.onify-api_app_token
   }
   type = "Opaque"
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_config_map" "onify-app" {
@@ -22,6 +23,7 @@ resource "kubernetes_config_map" "onify-app" {
     ONIFY_api_internalUrl = "http://${var.onify_client_code}-${var.onify_instance}-api:8181/api/v2"
     ONIFY_api_externalUrl = "/api/v2"
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_stateful_set" "onify-app" {
@@ -92,6 +94,7 @@ resource "kubernetes_stateful_set" "onify-app" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_service" "onify-app" {
@@ -114,6 +117,7 @@ resource "kubernetes_service" "onify-app" {
     }
     type = "NodePort"
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_ingress" "onify-app" {
@@ -140,4 +144,5 @@ resource "kubernetes_ingress" "onify-app" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }

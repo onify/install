@@ -16,6 +16,7 @@ resource "kubernetes_secret" "docker-onify" {
 DOCKER
   }
   type = "kubernetes.io/dockerconfigjson"
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_stateful_set" "onify-agent" {
@@ -88,6 +89,7 @@ resource "kubernetes_stateful_set" "onify-agent" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_service" "onify-agent" {
@@ -111,6 +113,7 @@ resource "kubernetes_service" "onify-agent" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_ingress" "onify-agent" {
@@ -133,4 +136,5 @@ resource "kubernetes_ingress" "onify-agent" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }

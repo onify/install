@@ -9,6 +9,7 @@ resource "kubernetes_secret" "onify-api" {
     client_secret    = var.onify-api_client_secret
   }
   type = "Opaque"
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_config_map" "onify-api" {
@@ -32,6 +33,7 @@ resource "kubernetes_config_map" "onify-api" {
     ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
     ONIFY_websockets_agent_url  = "ws://${var.onify_client_code}-${var.onify_instance}-agent:8080/hub"
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_stateful_set" "onify-api" {
@@ -120,6 +122,7 @@ resource "kubernetes_stateful_set" "onify-api" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 resource "kubernetes_service" "onify-api" {
@@ -143,6 +146,7 @@ resource "kubernetes_service" "onify-api" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 
@@ -171,4 +175,5 @@ resource "kubernetes_ingress" "onify-api" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }

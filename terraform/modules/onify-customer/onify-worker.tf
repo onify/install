@@ -84,6 +84,6 @@ resource "kubernetes_stateful_set" "onify-worker" {
         }
       }
     }
-
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }

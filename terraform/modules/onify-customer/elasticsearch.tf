@@ -1,15 +1,15 @@
-### EXAMPLE SSD STORAGE CLASS
-resource "kubernetes_storage_class" "ssd" {
-  count = var.elasticsearch_address != null ? 0 : 1
-  metadata {
-    name = "ssd"
-  }
-  storage_provisioner = "kubernetes.io/gce-pd"
-  parameters = {
-    type = "pd-ssd"
-  }
-  mount_options = ["file_mode=0700", "dir_mode=0777", "mfsymlinks", "uid=1000", "gid=1000", "nobrl", "cache=none"]
-}
+# ### EXAMPLE SSD STORAGE CLASS
+# resource "kubernetes_storage_class" "ssd" {
+#   count = var.elasticsearch_address != null ? 0 : 1
+#   metadata {
+#     name = "ssd"
+#   }
+#   storage_provisioner = "kubernetes.io/gce-pd"
+#   parameters = {
+#     type = "pd-ssd"
+#   }
+#   mount_options = ["file_mode=0700", "dir_mode=0777", "mfsymlinks", "uid=1000", "gid=1000", "nobrl", "cache=none"]
+# }
 
 resource "kubernetes_service" "elasticsearch" {
   count = var.elasticsearch_address != null ? 0 : 1
@@ -37,6 +37,7 @@ resource "kubernetes_service" "elasticsearch" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
+    depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 
@@ -146,4 +147,5 @@ resource "kubernetes_stateful_set" "elasticsearch" {
       }
     }
   }
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
