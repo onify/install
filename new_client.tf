@@ -7,8 +7,8 @@ terraform {
 }
 
 module "onify-client-acme" {
-  #source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
-  source               = "./terraform/modules/onify-customer"
+  source           = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform"
+  #source               = "./terraform/modules/onify-customer"
   gcr_registry_keyfile = "./keyfile.json"
   onify_client_code    = "acme"
   onify_instance       = "demo1"
@@ -46,4 +46,15 @@ module "onify-client-acme" {
   //elasticsearch_cpu_requests    = "10mi"
   //elasticsearch_heapsize        = "1g" // set ES_JAVA_OPTS
   elasticsearch_disksize = "20Gi"
+}
+
+
+provider "kubernetes" {
+  #USE KUBECONFIG
+  ##LINUX/MAC
+  #config_path = "~/.kube/config"
+  ##WINDOWS
+  config_path = "%USERPROFILE%/.kube/config"
+  #CONTEXT 2 USE. CHECK .kube/config FILE
+  config_context = "gke_onify-forge_europe-north1-a_onify-demo-gke"
 }
