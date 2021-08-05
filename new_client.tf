@@ -50,11 +50,6 @@ module "onify-client-acme" {
 
 
 provider "kubernetes" {
-  #USE KUBECONFIG
-  ##LINUX/MAC
-  #config_path = "~/.kube/config"
-  ##WINDOWS
-  config_path = "%USERPROFILE%/.kube/config"
-  #CONTEXT 2 USE. CHECK .kube/config FILE
-  config_context = "gke_onify-forge_europe-north1-a_onify-demo-gke"
+  config_path = "~/.kube/config"
+  config_context = "gke_onify-forge_europe-north1-a_onify-demo-gke" #CONTEXT 2 USE. CHECK .kube/config FILE
 }
