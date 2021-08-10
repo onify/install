@@ -2,7 +2,7 @@
 terraform {
   backend "gcs" {
     bucket = "onify-terraform-state" // Bucket where to store state (needs to exist)
-    prefix = "<CLIENT CODE>-<INSTANCE CODE>" // Folder where to store state ("client-code + '-' + instance-code" is recommended)
+    prefix = "client-instance/<CLIENT CODE>-<INSTANCE CODE>" // Folder where to store state ("client-code + '-' + instance-code" is recommended)
   }
 }
 
