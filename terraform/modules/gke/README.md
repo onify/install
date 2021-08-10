@@ -2,7 +2,7 @@ example use to create gke cluster
 
 ```
 module "gke" {
-  source           = "git::git@github.com:onify/install/terraform/modules/gke"
+  source           = "github.com/onify/install//terraform/modules/gke"
   name			   = "onify-example-gke"
   gce_project_id   = "gce-something-project-id
   gce_region	   = "europe-north1"

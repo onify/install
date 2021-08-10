@@ -32,13 +32,13 @@ terraform {
 }
 
 module "gcs" {
-  source           = "git::git@github.com:onify/install/terraform/modules/gcs"
+  source           = "github.com/onify/install//terraform/modules/gcs"
   name           = "${var.name}-terraform"
   gce_project_id = var.gce_project_id
 }
 
 module "gke" {
-  source           = "git::git@github.com:onify/install/terraform/modules/gke"
+  source           = "github.com/onify/install//terraform/modules/gke"
   name           = var.name
   gce_project_id = var.gce_project_id
   gce_region     = var.gce_region
@@ -48,14 +48,14 @@ module "gke" {
 }
 
 module "onify-infrastructure" {
-  source           = "git::git@github.com:onify/install/terraform/modules/onify-infrastructure"
+  source           = "github.com/onify/install//terraform/modules/onify-infrastructure"
   external-dns-domain = "onify.io"
   gce_project_id      = var.gce_project_id
   traefik_version     = "2.4.8"
 }
 
 module "onify-client-example" {
-  source           = "git::git@github.com:onify/install/terraform/modules/onify-customer"
+  source           = "github.com/onify/install//terraform/modules/onify-customer"
   client                   = "example"
   gcr_registry_keyfile     = "~/repos/onify/keyfile.json"
   onify-agent_version      = "latest"
