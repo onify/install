@@ -13,8 +13,7 @@ provider "kubernetes" {
 }
 
 module "onify-client-instance" {
-  //source = "git::git@github.com:onify/install//terraform/modules/onify-customer?ref=terraform" // Source for Terraform modules
-  source = "./terraform/modules/onify-customer" // Source for Terraform modules
+  source = "github.com/onify/install//terraform/modules/onify-customer?ref=terraform" // Source for Terraform modules
   gcr_registry_keyfile = "./keyfile.json" // Path to keyfile to access container images in GCR
 
   onify_client_code = "<CLIENT CODE>" // ENV = ONIFY_client_code
