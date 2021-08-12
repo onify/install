@@ -128,7 +128,7 @@ resource "kubernetes_ingress" "onify-app" {
     annotations = {
       "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
       "traefik.ingress.kubernetes.io/router.tls"              = "true"
-      "traefik.ingress.kubernetes.io/router.tls.certresolver" = "default"
+      "traefik.ingress.kubernetes.io/router.tls.certresolver" = var.ssl_staging ? "staging" : "default"
     }
   }
   spec {

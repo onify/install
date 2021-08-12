@@ -106,3 +106,6 @@ variable "onify-app_memory_requests" {
 variable "onify-app_cpu_requests" {
     default = "10m"
 }
+variable "ssl_staging" {
+    default = false
+}
