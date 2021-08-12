@@ -24,6 +24,8 @@ module "onify-client-instance" {
   onify-api_secret = "<API ADMIN APP SECRET>" // ENV = ONIFY_apiTokens_app_secret
   onify-api_license = "<ONIFY LICENSE>" // ENV = ONIFY_initialLicense
 
+  #ssl_staging = true // Use Letencrypt staging API instead of default   
+    
   // -- Onify Agent --
   //onify-agent_external = true // Creates ingress with external access
   
