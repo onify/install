@@ -122,6 +122,11 @@ resource "kubernetes_ingress" "onify-agent" {
   metadata {
     name      = "${var.onify_client_code}-${var.onify_instance}-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
+    annotations = {
+      "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
+      "traefik.ingress.kubernetes.io/router.tls"              = "true"
+      "traefik.ingress.kubernetes.io/router.tls.certresolver" = var.ssl_staging ? "staging" : "default"
+    }
   }
   spec {
     rule {
