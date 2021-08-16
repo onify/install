@@ -74,7 +74,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
         }
         container {
           name  = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
-          image = "docker.elastic.co/elasticsearch/elasticsearch-oss:7.6.2"
+          image = "docker.elastic.co/elasticsearch/elasticsearch-oss:${var.elasticsearch_version}"
 
           port {
             name           = "nodes"
