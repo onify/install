@@ -53,12 +53,12 @@ resource "kubernetes_stateful_set" "onify-agent" {
           name  = "onfiy-agent"
           resources {
             limits = {
-              cpu    = var.cpu_limit
-              memory = var.memory_limit
+              cpu    = var.onify-agent_cpu_limit
+              memory = var.onify-agent_memory_limit
             }
             requests = {
-              cpu    = var.cpu_requests
-              memory = var.memory_requests
+              cpu    = var.onify-agent_cpu_requests
+              memory = var.monify-agent_memory_requests
             }
           }
           #   liveness_probe {

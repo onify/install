@@ -70,12 +70,12 @@ resource "kubernetes_stateful_set" "onify-api" {
           name  = "onfiy-api"
           resources {
             limits = {
-              cpu    = var.cpu_limit
-              memory = var.memory_limit
+              cpu    = var.onify-api_cpu_limit
+              memory = var.onify-api_memory_limit
             }
             requests = {
-              cpu    = var.cpu_requests
-              memory = var.memory_requests
+              cpu    = var.onify-api_cpu_requests
+              memory = var.onify-api_memory_requests
             }
           }
           port {
