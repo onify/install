@@ -135,7 +135,7 @@ resource "kubernetes_ingress" "onify-agent" {
         path {
           backend {
             service_name = "${var.onify_client_code}-${var.onify_instance}-agent"
-            service_port = 8181
+            service_port = 8080
           }
         }
       }
