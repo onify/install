@@ -58,7 +58,7 @@ resource "kubernetes_stateful_set" "onify-agent" {
             }
             requests = {
               cpu    = var.onify-agent_cpu_requests
-              memory = var.monify-agent_memory_requests
+              memory = var.onify-agent_memory_requests
             }
           }
           #   liveness_probe {
