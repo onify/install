@@ -29,7 +29,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
         }
         container {
           image = "eu.gcr.io/onify-images/hub/api:${var.onify-worker_version}"
-          name  = "onfiy-worker"
+          name  = "onify-worker"
           resources {
             limits = {
               cpu    = var.onify-worker_cpu_limit
