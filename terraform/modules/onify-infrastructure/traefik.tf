@@ -105,7 +105,10 @@ resource "kubernetes_deployment" "traefik" {
           args = [
             "--entrypoints.web.Address=:80",
             "--entryPoints.websecure.address=:443",
-            "--providers.kubernetesingress",
+            "--providers.kubernetesingress=true",
+            "--providers.kubernetescrd=true",
+            "--providers.kubernetescrd.namespaces=traefik",
+            "--entrypoints.web.http.redirections.entryPoint.to=websecure",
             "--log.Level=${var.traefik-log_level}",
             "--certificatesResolvers.default.acme.storage=acme.json",
             "--certificatesResolvers.default.acme.email=hello@onify.io",
