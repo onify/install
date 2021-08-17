@@ -29,15 +29,15 @@ resource "kubernetes_stateful_set" "onify-worker" {
         }
         container {
           image = "eu.gcr.io/onify-images/hub/api:${var.onify-worker_version}"
-          name  = "onfiy-api"
+          name  = "onify-worker"
           resources {
             limits = {
-              cpu    = var.cpu_limit
-              memory = var.memory_limit
+              cpu    = var.onify-worker_cpu_limit
+              memory = var.onify-worker_memory_limit
             }
             requests = {
-              cpu    = var.cpu_requests
-              memory = var.memory_requests
+              cpu    = var.onify-worker_cpu_requests
+              memory = var.onify-worker_memory_requests
             }
           }
           port {
