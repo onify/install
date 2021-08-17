@@ -36,10 +36,10 @@ variable "onify_client_code" {}
 variable "onify_instance" {}
 variable "onify-api_license" {}
 variable "onify-api_external" {
-    default = false
+    default = true
 }
 variable "onify-agent_external" {
-    default = false
+    default = true
 }
 variable "elasticsearch_address" {
     type = string

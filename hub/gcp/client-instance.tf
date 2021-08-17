@@ -23,14 +23,18 @@ module "onify-client-instance" {
   onify-api_client_secret = "<CLIENT SECRET>" // ENV = ONIFY_client_secret
   onify-api_secret = "<API ADMIN APP SECRET>" // ENV = ONIFY_apiTokens_app_secret
   onify-api_license = "<ONIFY LICENSE>" // ENV = ONIFY_initialLicense
-
-  #ssl_staging = true // Use Letencrypt staging API instead of default   
+  ssl_staging = true // Letencrypt staging API or not
     
   // -- Onify Agent --
   //onify-agent_external = true // Creates ingress with external access
+  onify-agent_version = "latest" // Image version
+  onify-agent_memory_limit = "10m"
+  onify-agent_cpu_limit = "10mi"
+  onify-agent_memory_requests = "10m"
+  onify-agent_cpu_requests = "10mi"
   
   // -- Onify API --
-  onify-api_external = true // Creates ingress with external access
+  //onify-api_external = true // Creates ingress with external access
   onify-api_version = "latest" // Image version
   onify-api_memory_limit = "10m"
   onify-api_cpu_limit = "10mi"
