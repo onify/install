@@ -52,6 +52,7 @@ module "onify-client-instance" {
   onify-app_cpu_requests = "10mi"
   
   // -- Elasticsearch --
+  elasticsearch_version = "7.11.1"
   elasticsearch_heapsize = "1g" // set ES_JAVA_OPTS 
   elasticsearch_disksize = "20Gi"
   //elasticsearch_address = "http://elasticcloud.example.something:9200" //do not create elasticsearch
