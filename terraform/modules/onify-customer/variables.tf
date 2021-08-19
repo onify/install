@@ -110,5 +110,5 @@ variable "onify-app_cpu_requests" {
     default = "10m"
 }
 variable "ssl_staging" {
-    default = false
+    default = true
 }
