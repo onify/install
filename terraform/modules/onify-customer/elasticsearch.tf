@@ -37,7 +37,7 @@ resource "kubernetes_service" "elasticsearch" {
     type = "NodePort"
     //type = "LoadBalancer"
   }
-    depends_on = [kubernetes_namespace.customer_namespace]
+  depends_on = [kubernetes_namespace.customer_namespace]
 }
 
 
@@ -103,14 +103,14 @@ resource "kubernetes_stateful_set" "elasticsearch" {
             name       = "${var.onify_client_code}-${var.onify_instance}-data"
             mount_path = "/usr/share/elasticsearch/data"
           }
-          //resources {
-          //limits = {
-          //  memory = var.elasticsearch_memory_limit
-          //}
-          //requests = {
-          //  memory = var.elasticsearch_memory_requests
-          //}
-          //}
+          resources {
+            limits = {
+              memory = var.elasticsearch_memory_limit
+            }
+            # requests = {
+            #   memory = var.elasticsearch_memory_requests
+            # }
+          }
           # liveness_probe {
           #   http_get {
           #     path   = "/_cluster/health"
