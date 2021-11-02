@@ -103,6 +103,32 @@ Before installing traefik the following hosts have to be decided.
 - `api_public_host`: host for public access to api
 - `app_public_host`: host for public access to app
 
+## (OPTIONAL) To use own certificates instead of Let´s encrypt
+To use own certificates a different cert resolver need to be specified in traefik ingressrout. This needs to be done for each service (app, api, agent-server, etc).
+
+1. First create a kubernetes secret with the certificate and key. (IMPORTANT to use tls.crt and tls.key as names)
+
+```kubectl create secret generic <secretname> --from-file=~/certs/<service>/tls.crt --from-file=~/certs/<service>/tls.key```
+
+*Remember this:*
+_If your IngressRoute specifies a Kubernetes Secret to use for a TLS certificate, Traefik will serve that route with that certificate only if the certificate's SANs cover what the TLS client sends in its SNI hint—and even then, if another loaded certificate happens to also cover that hint, it might be used instead; the selection among competing eligible certificates is nondeterministic. If your IngressRoute specifies a certificate in a Secret, but that incoming requests don't appear to fall within that certificate's SANs, then Traefik will use its default TLS certificate instead._
+
+2. Specify the secret in the ingressroute manifest
+
+Remember to use correct secret per service if not wildcard cert.
+
+```
+  tls:
+   secretName: <secretname>
+```
+
+*Note:*
+_If you are changing this, you might need to restart microk8s._
+
+> Example how to create self signing cert for testing
+
+> `openssl req -subj '/CN=<hostname>/O=Self/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout tls.key -out tls.crt`
+
 ### Api-token
 
 Token used to authenticate app backend with api. Generated api token from value of `app_token_secret`:
