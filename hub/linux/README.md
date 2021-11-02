@@ -19,8 +19,10 @@ sudo ln -s /var/lib/snapd/snap /snap
 
 ## Install Microk8s
 
+Only version 1.18 k8s is supported with current manifest. It´s a ongoing work to fix this.
+
 ```bash
-snap install microk8s --classic
+sudo snap install microk8s --classic --channel=1.18/stable
 ```
 
 ## Configure

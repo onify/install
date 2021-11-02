@@ -18,12 +18,12 @@ To retreive images from the onify registry you need a registry secret. Contact O
 
 # Deployment pipeline
 
-1. [elasticsearch 7](#elasticsearch) container unless you have your own
-2. [Onify registration credentials](#docker-registry-credentials)
-2. agent-server container
-3. Setup hub-api container and environment variables
-4. Setup hub-app container and environment variables
-5. Optional [traefik](#traefic) container with external hosts and TLS termination
+1. Optional [traefik](#traefic) container with external hosts and TLS termination
+2. Optional [elasticsearch 7](#elasticsearch) container
+3. [Onify registration credentials](#docker-registry-credentials)
+4. agent-server container
+5. Setup api/worker container and environment variables
+6. Setup app container and environment variables
 
 # Docker registry credentials
 
