@@ -39,3 +39,6 @@ override.tf.json
 .terraform.lock.hcl
 whoami.tf
 terraform.exe
+*.BAK
+*.sh
+*.OLD
