@@ -13,13 +13,23 @@ resource "google_container_cluster" "primary" {
   name = "${var.name}-gke"
   //location = var.gce_region
   location = "${var.gce_region}-a"
+  node_pool {
+  	name = "${var.name}-gke-node-pool"
+  	version = "1.20.10-gke.1600"
+  	autoscaling {
+     		max_node_count = var.gke_num_nodes
+     		min_node_count = 1
+  	}
 
+  }
   remove_default_node_pool = true
   initial_node_count       = 1
 
   network    = google_compute_network.vpc.name
   subnetwork = google_compute_subnetwork.subnet.name
-
+  resource_labels = {
+  	type = "dev"
+  }
   master_auth {
     username = var.gke_username
     password = var.gke_password
@@ -37,6 +47,11 @@ resource "google_container_node_pool" "primary_nodes" {
   location   = "${var.gce_region}-a"
   cluster    = google_container_cluster.primary.name
   node_count = var.gke_num_nodes
+  version = "1.20.10-gke.1600"
+  autoscaling {
+     max_node_count = var.gke_num_nodes
+     min_node_count = 1
+  }
 
   node_config {
     oauth_scopes = [

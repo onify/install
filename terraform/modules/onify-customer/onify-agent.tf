@@ -21,27 +21,27 @@ DOCKER
 
 resource "kubernetes_stateful_set" "onify-agent" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-agent"
+    name      = "${local.client_code}-${local.onify_instance}-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app  = "${var.onify_client_code}-${var.onify_instance}-agent"
-      name = "${var.onify_client_code}-${var.onify_instance}"
+      app  = "${local.client_code}-${local.onify_instance}-agent"
+      name = "${local.client_code}-${local.onify_instance}"
     }
   }
   spec {
-    service_name = "${var.onify_client_code}-${var.onify_instance}-agent"
+    service_name = "${local.client_code}-${local.onify_instance}-agent"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${var.onify_client_code}-${var.onify_instance}-agent"
-        task = "${var.onify_client_code}-${var.onify_instance}-agent"
+        app  = "${local.client_code}-${local.onify_instance}-agent"
+        task = "${local.client_code}-${local.onify_instance}-agent"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${var.onify_client_code}-${var.onify_instance}-agent"
-          task = "${var.onify_client_code}-${var.onify_instance}-agent"
+          app  = "${local.client_code}-${local.onify_instance}-agent"
+          task = "${local.client_code}-${local.onify_instance}-agent"
         }
       }
       spec {
@@ -73,17 +73,12 @@ resource "kubernetes_stateful_set" "onify-agent" {
             name           = "onify-agent"
             container_port = 8080
           }
-          env {
-            name  = "log_level"
-            value = "2"
-          }
-          env {
-            name  = "log_type"
-            value = "1"
-          }
-          env {
-            name  = "hub_version"
-            value = "v2"
+          dynamic "env" {
+            for_each = var.onify_agent_envs
+            content {
+              name  = env.key
+              value = env.value
+            }
           }
         }
       }
@@ -94,7 +89,7 @@ resource "kubernetes_stateful_set" "onify-agent" {
 
 resource "kubernetes_service" "onify-agent" {
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-agent"
+    name      = "${local.client_code}-${local.onify_instance}-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "cloud.google.com/load-balancer-type" = "Internal"
@@ -102,8 +97,8 @@ resource "kubernetes_service" "onify-agent" {
   }
   spec {
     selector = {
-      app  = "${var.onify_client_code}-${var.onify_instance}-agent"
-      task = "${var.onify_client_code}-${var.onify_instance}-agent"
+      app  = "${local.client_code}-${local.onify_instance}-agent"
+      task = "${local.client_code}-${local.onify_instance}-agent"
     }
     port {
       name     = "onify-agent"
@@ -120,7 +115,7 @@ resource "kubernetes_ingress" "onify-agent" {
   count                  = var.onify-agent_external ? 1 : 0
   wait_for_load_balancer = false
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-agent"
+    name      = "${local.client_code}-${local.onify_instance}-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     annotations = {
       "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
@@ -130,11 +125,11 @@ resource "kubernetes_ingress" "onify-agent" {
   }
   spec {
     rule {
-      host = "${var.onify_client_code}-${var.onify_instance}-agent.onify.io"
+      host = "agent.${var.external-dns-domain}"
       http {
         path {
           backend {
-            service_name = "${var.onify_client_code}-${var.onify_instance}-agent"
+            service_name = "${local.client_code}-${local.onify_instance}-agent"
             service_port = 8080
           }
         }

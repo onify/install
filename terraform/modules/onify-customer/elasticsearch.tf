@@ -11,18 +11,39 @@
 #   mount_options = ["file_mode=0700", "dir_mode=0777", "mfsymlinks", "uid=1000", "gid=1000", "nobrl", "cache=none"]
 # }
 
+resource "kubernetes_persistent_volume" "local" {
+  count = var.elasticsearch_address != null ? 0 : 1
+  metadata {
+    name = "${local.client_code}-${local.onify_instance}-data"
+  }
+  spec {
+    storage_class_name = "local"
+    capacity = {
+      storage = var.elasticsearch_disksize
+    }
+    persistent_volume_reclaim_policy = "Retain" // performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim"
+    access_modes = ["ReadWriteOnce"]
+    persistent_volume_source {
+     host_path {
+        path = "/usr/share/elasticsearch/data"
+      }
+    }
+  }
+  depends_on = [kubernetes_namespace.customer_namespace]
+}
+
 resource "kubernetes_service" "elasticsearch" {
   count = var.elasticsearch_address != null ? 0 : 1
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+    name      = "${local.client_code}-${local.onify_instance}-elasticsearch"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app = "${var.onify_client_code}-${var.onify_instance}"
+      app = "${local.client_code}-${local.onify_instance}"
     }
   }
   spec {
     selector = {
-      app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+      app = "${local.client_code}-${local.onify_instance}-elasticsearch"
     }
     port {
       name     = "client"
@@ -44,10 +65,10 @@ resource "kubernetes_service" "elasticsearch" {
 resource "kubernetes_stateful_set" "elasticsearch" {
   count = var.elasticsearch_address != null ? 0 : 1
   metadata {
-    name      = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
-    namespace = "${var.onify_client_code}-${var.onify_instance}"
+    name      = "${local.client_code}-${local.onify_instance}-elasticsearch"
+    namespace = "${local.client_code}-${local.onify_instance}"
     labels = {
-      app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+      app = "${local.client_code}-${local.onify_instance}-elasticsearch"
     }
   }
   spec {
@@ -56,14 +77,14 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     revision_history_limit = 5
     selector {
       match_labels = {
-        app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+        app = "${local.client_code}-${local.onify_instance}-elasticsearch"
       }
     }
-    service_name = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+    service_name = "${local.client_code}-${local.onify_instance}-elasticsearch"
     template {
       metadata {
         labels = {
-          app = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+          app = "${local.client_code}-${local.onify_instance}-elasticsearch"
         }
       }
       spec {
@@ -73,7 +94,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           run_as_non_root = true
         }
         container {
-          name  = "${var.onify_client_code}-${var.onify_instance}-elasticsearch"
+          name  = "${local.client_code}-${local.onify_instance}-elasticsearch"
           image = "docker.elastic.co/elasticsearch/elasticsearch:${var.elasticsearch_version}"
 
           port {
@@ -90,7 +111,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           }
           env {
             name  = "cluster.name"
-            value = "${var.onify_client_code}-${var.onify_instance}-onify-elasticsearch"
+            value = "${local.client_code}-${local.onify_instance}-onify-elasticsearch"
           }
           dynamic "env" {
             for_each = var.elasticsearch_heapsize != null ? [1] : []
@@ -100,9 +121,10 @@ resource "kubernetes_stateful_set" "elasticsearch" {
             }
           }
           volume_mount {
-            name       = "${var.onify_client_code}-${var.onify_instance}-data"
+            name       = "${local.client_code}-${local.onify_instance}-data"
             mount_path = "/usr/share/elasticsearch/data"
           }
+          
           resources {
             limits = {
               memory = var.elasticsearch_memory_limit
@@ -133,12 +155,11 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     }
     volume_claim_template {
       metadata {
-        name      = "${var.onify_client_code}-${var.onify_instance}-data"
-        namespace = "${var.onify_client_code}-${var.onify_instance}"
+        name      = "${local.client_code}-${local.onify_instance}-data"
       }
       spec {
         access_modes = ["ReadWriteOnce"]
-        #storage_class_name = "standard" //could be "ssd" for faster disks
+        storage_class_name = var.gke ? "" : "local" #use ssd for faster disks
         resources {
           requests = {
             storage = var.elasticsearch_disksize
@@ -147,5 +168,9 @@ resource "kubernetes_stateful_set" "elasticsearch" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.customer_namespace]
+  # provisioner "local-exec" {
+  #       when = destroy    
+  #       command = "kubectl delete pvc ${local.client_code}-${local.onify_instance}-data -n ${kubernetes_namespace.customer_namespace.metadata.0.name}"
+  # }
+  depends_on = [kubernetes_namespace.customer_namespace, kubernetes_persistent_volume.local]
 }

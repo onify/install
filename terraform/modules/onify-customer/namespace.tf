@@ -1,5 +1,5 @@
 resource "kubernetes_namespace" "customer_namespace" {
     metadata {
-        name = "${var.onify_client_code}-${var.onify_instance}"
+        name = "${local.client_code}-${local.onify_instance}"
     }
 }

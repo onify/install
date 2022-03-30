@@ -8,6 +8,7 @@ resource "kubernetes_service_account" "traefik" {
     name      = "traefik-ingress-controller"
     namespace = "traefik"
   }
+  depends_on = [kubernetes_namespace.traefik]
 }
 
 resource "kubernetes_cluster_role" "traefik" {
@@ -51,6 +52,7 @@ resource "kubernetes_cluster_role_binding" "traefik" {
     namespace = "traefik"
     api_group = ""
   }
+  depends_on = [kubernetes_cluster_role.traefik, kubernetes_service_account.traefik]
 }
 
 resource "kubernetes_deployment" "traefik" {
@@ -62,6 +64,9 @@ resource "kubernetes_deployment" "traefik" {
     }
   }
   spec {
+    strategy {
+      type = "Recreate"
+    }
     selector {
       match_labels = {
         k8s-app = "traefik-ingress-lb"
@@ -103,6 +108,8 @@ resource "kubernetes_deployment" "traefik" {
             }
           }
           args = [
+            "--api.dashboard=true",
+            "--api.insecure=true",
             "--entrypoints.web.Address=:80",
             "--entryPoints.websecure.address=:443",
             "--providers.kubernetesingress=true",
@@ -115,11 +122,12 @@ resource "kubernetes_deployment" "traefik" {
             "--certificatesResolvers.staging.acme.email=hello@onify.io",
             "--certificatesResolvers.staging.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory",
             "--certificatesResolvers.staging.acme.tlschallenge",
-            "--global.sendAnonymousUsage=false"]
+            "--global.sendAnonymousUsage=true"]
         }
       }
     }
   }
+  depends_on = [kubernetes_cluster_role.traefik, kubernetes_service_account.traefik]
 }
 
 resource "kubernetes_service" "traefik" {
@@ -127,10 +135,11 @@ resource "kubernetes_service" "traefik" {
     name      = "traefik-ingress-service"
     namespace = "traefik"
     annotations = {
-      "external-dns.alpha.kubernetes.io/hostname" = "*.onify.io"
+      "external-dns.alpha.kubernetes.io/hostname" = "*.${var.external-dns-domain}"
       "external-dns.alpha.kubernetes.io/ttl"      = "120"
     }
   }
+  wait_for_load_balancer = false
   spec {
     selector = {
       k8s-app = "traefik-ingress-lb"
@@ -150,7 +159,7 @@ resource "kubernetes_service" "traefik" {
       port     = 8080
       protocol = "TCP"
     }
-    type = "LoadBalancer"
+    type = var.gke ? "LoadBalancer" : "NodePort"
   }
   depends_on = [kubernetes_namespace.traefik]
 }
@@ -160,10 +169,16 @@ resource "kubernetes_ingress" "traefik" {
   metadata {
     name      = "traefik"
     namespace = "traefik"
+    annotations = {
+      "traefik.ingress.kubernetes.io/router.entrypoints"      = "websecure"
+      "traefik.ingress.kubernetes.io/router.tls"              = "true"
+      "traefik.ingress.kubernetes.io/router.tls.certresolver" = "staging"
+      //"traefik.ingress.kubernetes.io/router.middlewares" = "traefik-basic-auth@kubernetescrd"
+    }
   }
   spec {
     rule {
-      host = "traefik.onify.io"
+      host = "traefik.${var.external-dns-domain}"
       http {
         path {
           backend {

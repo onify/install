@@ -1,10 +1,12 @@
 resource "kubernetes_service_account" "external-dns" {
+  count = var.gke ? 1 : 0
   metadata {
     name = "external-dns"
   }
 }
 
 resource "kubernetes_cluster_role" "external-dns" {
+  count = var.gke ? 1 : 0
   metadata {
     name = "external-dns"
   }
@@ -26,6 +28,7 @@ resource "kubernetes_cluster_role" "external-dns" {
 }
 
 resource "kubernetes_cluster_role_binding" "external-dns" {
+  count = var.gke ? 1 : 0
   metadata {
     name = "external-dns-viewer"
   }
@@ -43,6 +46,7 @@ resource "kubernetes_cluster_role_binding" "external-dns" {
 }
 
 resource "kubernetes_deployment" "external-dns" {
+  count = var.gke ? 1 : 0
   metadata {
     name = "external-dns"
   }
