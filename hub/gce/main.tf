@@ -40,7 +40,7 @@ module "gce" {
   ssh_keys = [
       {
         user = "ubuntu"
-        publickey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOM0Z44gsOiiM5642Qm0RxTAfnHCTr/oSMN9S8jYMHAW"
+        publickey = "ssh-ed25519 XXXXXXX"
       }
     ]
 }
