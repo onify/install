@@ -1,0 +1,291 @@
+# Example file to install traefik and expose api and app
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: traefik
+---
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: traefik-ingress-controller
+    namespace: traefik
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: traefik
+  name: traefik-ingress-controller
+  labels:
+    k8s-app: traefik-ingress-lb
+spec:
+  selector:
+    matchLabels:
+      name: traefik-ingress-lb
+  template:
+    metadata:
+      labels:
+        k8s-app: traefik-ingress-lb
+        name: traefik-ingress-lb
+    spec:
+      hostNetwork: true
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      containers:
+      - image: traefik:2.1.2
+        name: traefik-ingress-lb
+        ports:
+        - name: web
+          containerPort: 80
+          hostPort: 80
+        - name: websecure
+          containerPort: 443
+        - name: admin
+          containerPort: 8080
+          hostPort: 8080
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_BIND_SERVICE
+        args:
+        - --entrypoints.web.Address=:80
+        - --entryPoints.websecure.address=:443
+        - --providers.kubernetescrd
+        - --log.Level=INFO
+        - --certificatesResolvers.default.acme.storage=acme.json
+        - --certificatesResolvers.default.acme.email=admin@onify.local
+        - --certificatesResolvers.default.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+        #- --certificatesResolvers.default.acme.caServer=https://acme-v02.api.letsencrypt.org/directory
+        - --certificatesResolvers.default.acme.tlschallenge
+        - --global.sendAnonymousUsage=false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-ingress-service
+  namespace: traefik
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+    - protocol: TCP
+      port: 80
+      name: web
+    - protocol: TCP
+      port: 443
+      name: websecure
+    - protocol: TCP
+      port: 8080
+      name: admin
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: traefikservices.traefik.containo.us
+  namespace: traefik
+spec:
+  group: traefik.containo.us
+  version: v1alpha1
+  names:
+    kind: TraefikService
+    plural: traefikservices
+    singular: traefikservice
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: ingressroutes.traefik.containo.us
+  namespace: traefik
+spec:
+  group: traefik.containo.us
+  version: v1alpha1
+  names:
+    kind: IngressRoute
+    plural: ingressroutes
+    singular: ingressroute
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: ingressroutetcps.traefik.containo.us
+  namespace: traefik
+spec:
+  group: traefik.containo.us
+  version: v1alpha1
+  names:
+    kind: IngressRouteTCP
+    plural: ingressroutetcps
+    singular: ingressroutetcp
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: middlewares.traefik.containo.us
+  namespace: traefik
+spec:
+  group: traefik.containo.us
+  version: v1alpha1
+  names:
+    kind: Middleware
+    plural: middlewares
+    singular: middleware
+  scope: Namespaced
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: tlsoptions.traefik.containo.us
+  namespace: traefik
+spec:
+  group: traefik.containo.us
+  version: v1alpha1
+  names:
+    kind: TLSOption
+    plural: tlsoptions
+    singular: tlsoption
+  scope: Namespaced
+
+---
+  kind: ClusterRole
+  apiVersion: rbac.authorization.k8s.io/v1beta1
+  metadata:
+    name: traefik-ingress-controller
+    namespace: traefik
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - services
+        - endpoints
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+      resources:
+        - ingresses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - extensions
+      resources:
+        - ingresses/status
+      verbs:
+        - update
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - middlewares
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - ingressroutes
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - ingressroutetcps
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - tlsoptions
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - traefik.containo.us
+      resources:
+        - traefikservices
+      verbs:
+        - get
+        - list
+        - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: traefik-ingress-controller
+  namespace: traefik
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-ingress-controller
+subjects:
+  - kind: ServiceAccount
+    name: traefik-ingress-controller
+    namespace: traefik
+---
+# agent-server
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: agenthttp
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`<agent-server_host>`)
+      kind: Rule
+      services:
+      - name: onify-agent-server
+        port: 8080
+  tls:
+    certResolver: default
+---
+# Api
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: apihttp
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`<api_public_host>`)
+      kind: Rule
+      services:
+      - name: onify-api
+        port: 8181
+  tls:
+    certResolver: default
+---
+# App
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: apphttp
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`<app_public_host>`)
+      kind: Rule
+      services:
+      - name: onify-app
+        port: 3000
+  tls:
+    certResolver: default
