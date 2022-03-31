@@ -118,6 +118,7 @@ resource "kubernetes_deployment" "traefik" {
             "--certificatesResolvers.default.acme.storage=acme.json",
             "--certificatesResolvers.default.acme.email=hello@onify.io",
             "--certificatesResolvers.default.acme.tlschallenge",
+            "--certificatesResolvers.default.acme.caServer=https://acme-v02.api.letsencrypt.org/directory",
             "--certificatesResolvers.staging.acme.storage=acme.json",
             "--certificatesResolvers.staging.acme.email=hello@onify.io",
             "--certificatesResolvers.staging.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory",
