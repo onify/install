@@ -42,3 +42,4 @@ terraform.exe
 *.BAK
 *.sh
 *.OLD
+kubeconfig*
