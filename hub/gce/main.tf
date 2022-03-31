@@ -15,13 +15,13 @@ variable "gce_zone" {
 module "gcs" {
   source            = "github.com/onify/install//terraform/modules/gcs"
   name              = "${var.name}-terraform"
-  gce_project_id    = "onfiy-forge"
+  gce_project_id    = "onify-forge"
 }
 
 ### CAN ONLY BE USED IF MODULE GCS EXISTS
 terraform {
   backend "gcs" {
-    bucket = "k8s-example"
+    bucket = "k8s-example-terraform"
     prefix = "terraform/state/k8s-example"
   }
 }
@@ -40,7 +40,7 @@ module "gce" {
   ssh_keys = [
       {
         user = "ubuntu"
-        publickey = "ssh-ed25519 XXXXXXX"
+        publickey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOM0Z44gsOiiM5642Qm0RxTAfnHCTr/oSMN9S8jYMHAW"
       }
     ]
 }
