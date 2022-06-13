@@ -115,7 +115,7 @@ resource "kubernetes_deployment" "traefik" {
             "--providers.kubernetesingress=true",
             "--entrypoints.web.http.redirections.entryPoint.to=websecure",
             "--log.Level=${var.traefik-log_level}",
-            "--certificatesResolvers.default.acme.storage=acme.json",
+            "--certificatesResolvers.default.acme.storage=acmeDefault.json",
             "--certificatesResolvers.default.acme.email=hello@onify.io",
             "--certificatesResolvers.default.acme.tlschallenge",
             "--certificatesResolvers.default.acme.caServer=https://acme-v02.api.letsencrypt.org/directory",
