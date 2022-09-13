@@ -11,11 +11,10 @@ Install Onify
 - Install in [Docker](/hub/docker)
 - Install in [OpenShift](/hub/openshift)
 - Install in [Linux](/hub/linux)
-- Install in [Google Cloud Platform](/hub/gcp) (WIP)
+- Install in [Google Cloud Platform](/hub/gce) (WIP)
 
 # Onify Agent
 
 - Install in [Docker](/agent/docker)
 - Install in [Linux](https://support.onify.co/docs/install#onify-agent)
 - Install in [Windows](https://support.onify.co/docs/install#onify-agent)
-
