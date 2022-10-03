@@ -7,7 +7,7 @@ Install Onify
 
 # Onify Hub
 
-Please see matrix for all (containers)[containers.md] required for Onify Hub.
+Please see matrix for all [containers](/containers.md) required for Onify Hub.
 
 - Install in [Kubernetes](/hub/kubernetes)
 - Install in [Docker](/hub/docker)
