@@ -2,6 +2,8 @@
 
 Here is a detailed matrix for the containers required for Onify Hub. Elasticseach is a optional component.
 
+## List of containers and services
+
 |                                | APP                                                  | API                                      | WORKER                                   | AGENT-SERVER                                      | ELASTICSEARCH                                           |
 | ------------------------------ | ---------------------------------------------------- | ---------------------------------------- | ---------------------------------------- | ------------------------------------------------- | ------------------------------------------------------- |
 | \-- DEPLOYMENT --              |                                                      |                                          |                                          |                                                   |                                                         |
@@ -41,3 +43,19 @@ Here is a detailed matrix for the containers required for Onify Hub. Elasticseac
 | ONIFY\_api\_admintoken         | Bearer {base64(app:{ONIFY\_apiTokens\_app\_secret})} | n/a                                      | n/a                                      | n/a                                               | n/a                                                     |
 | ONIFY\_api\_internalUrl        | http://{api}:8181/api/v2                             | n/a                                      | n/a                                      | n/a                                               | n/a                                                     |
 | ONIFY\_api\_externalUrl        | /api/v2                                              | n/a                                      | n/a                                      | n/a                                               | n/a                                                     |
+
+### Explanation
+
+| What            | Meaning                                                                                        |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| Service         | Name of the service                                                                            |
+| Ports           | What ports that are used for the container. These should be forwarded to port 80 or 443.       |
+| Public          | If the container should be exposed outside the cluster.                                        |
+| Stateless       | Neither reads nor stores information about its state from one time that it is run to the next. |
+| Internet access | The service requires internet access. Mostly used for Git communication.                       |
+| Depends on      | What other containers/services that it depends on (or links to).                               |
+| Pods            | If the container can be scaled or not.                                                         |
+| Source          | Source code for logging purposes.                                                              |
+| DNS name        | Does the service need a seperate DNS name or not.                                              |
+| SSL cert        | Does the service need a SSL certificate. Related to DNS name.                                  |
+| Image           | Container (Docker) image.                                                                      |
