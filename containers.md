@@ -1,6 +1,8 @@
 # Onify Hub containers
 
-Here is a detailed matrix for the containers required for Onify Hub. Elasticseach is a optional component.
+Here is a detailed matrix for the containers required for Onify Hub. 
+
+> Note: Elasticseach could also be hosted outside the Onify Hub.
 
 ## List of containers and services
 
@@ -45,6 +47,9 @@ Here is a detailed matrix for the containers required for Onify Hub. Elasticseac
 | ONIFY\_api\_externalUrl        | /api/v2                                              | n/a                                      | n/a                                      | n/a                                               | n/a                                                     |
 
 ### Explanation
+
+Here we explain the meaning of the different DEPLOYMENT settings.
+
 
 | What            | Meaning                                                                                        |
 | --------------- | ---------------------------------------------------------------------------------------------- |
