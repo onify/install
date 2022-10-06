@@ -96,32 +96,32 @@ variable "onify_default_envs" {
         NODE_ENV                    = "production"
         ENV_PREFIX                  = "ONIFY_"
         INTERPRET_CHAR_AS_DOT       = "_"
-        ONIFY_db_indexPrefix        = "onify" # indices will be prefixed with this string
-        ONIFY_adminUser_username    = "admin"
-        ONIFY_adminUser_email       = "admin@onify.local"
-        ONIFY_resources_baseDir     = "/usr/share/onify/resources"
-        ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
-        ONIFY_autoinstall   = true
   }
 }
 variable "onify_api_envs" {
     type = map(string)
     default = {
+        ONIFY_db_indexPrefix        = "onify" # indices will be prefixed with this string
+        ONIFY_adminUser_username    = "admin"
+        ONIFY_adminUser_email       = "admin@onify.local"
+        ONIFY_resources_baseDir     = "/usr/share/onify/resources"
+        ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
+        ONIFY_autoinstall           = true
         ONIFY_client_code           = "xxxx"
         ONIFY_client_instance       = "xxxx"
         ONIFY_initialLicense        = "xxxx"
         ONIFY_adminUser_password    = ""
         ONIFY_apiTokens_app_secret  = ""
-        ONIFY_client_secret     = ""
+        ONIFY_client_secret         = ""
   }
 }
 
 variable "onify_app_envs" {
     type = map(string)
     default = {
-    ONIFY_api_externalUrl = "/api/v2"
-    ONIFY_disableAdminEndpoints = true
-    ONIFY_api_admintoken = "xx"
+    ONIFY_api_externalUrl       = "/api/v2"
+    ONIFY_disableAdminEndpoints = false
+    ONIFY_api_admintoken        = "xx"
   }
 }
 variable "onify_worker_envs" {
