@@ -74,13 +74,6 @@ resource "kubernetes_stateful_set" "onify-agent" {
             container_port = 8080
           }
           dynamic "env" {
-            for_each = var.onify_default_envs
-            content {
-              name  = env.key
-              value = env.value
-            }
-          }
-          dynamic "env" {
             for_each = var.onify_agent_envs
             content {
               name  = env.key
