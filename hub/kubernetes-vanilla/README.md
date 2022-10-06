@@ -1,4 +1,9 @@
-# Onify vanilla installation on kubernetes 
+# Onify vanilla installation on Kubernetes 
+
+Terraform boilerplate for setting up Onify in Kubernetes without storage and ingress.
+This is just an example to get all containers up and running in a k8s environment.
+
+> IMPORTANT: You also need to attach storage to Elasticsearch and configure the ingress for other services, see [containers](/containers.md) for more information.
 
 ## Prerequisites
 
@@ -7,8 +12,16 @@
 2. Terraform variables ```client_code``` and ```client_instance``` must be set either directly in main.tf or by exporting environmental variables  ```TF_VAR_client_code=company TF_VAR_client_instance=demo terraform apply```
 3. A gcr registry file containing credentials to download the onify gcr images
 
-Use kubeproxy to access onify application.
+> Note: It is recommended to use a remote backend for terraform state.
 
-It is recommended to use a remote backend for terraform state.
+## Setup 
 
+1. `terraform init`
+2. `terraform plan`
+3. `terraform apply`
 
+## Testing
+
+Use port forwarding to test the app and login with username and password.
+
+`kubectl port-forward --address localhost deployments/onify-{CLIENT CODE}-{INSTANCE CODE}-app 3000:3000 -n onify-{CLIENT CODE}-{INSTANCE CODE}`
