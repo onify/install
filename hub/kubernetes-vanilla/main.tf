@@ -3,7 +3,7 @@ variable "client_code" {
 variable "client_instance" {
 }
 
-module "onify-minimum" {
+module "onify" {
   source                         = "git::git@github.com:onify/install//terraform/modules/kubernetes-vanilla"
   gcr_registry_keyfile            = "~/repos/onify/keyfile.json"
   onify_api_envs                  = {
