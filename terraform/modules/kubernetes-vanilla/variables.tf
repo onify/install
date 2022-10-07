@@ -106,7 +106,7 @@ variable "onify_api_worker_defaults" {
         ONIFY_adminUser_email       = "admin@onify.local"
         ONIFY_resources_baseDir     = "/usr/share/onify/resources"
         ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
-        ONIFY_autoinstall           = true
+        ONIFY_autoinstall           = "true"
   }
 }
 variable "onify_api_envs" {
@@ -120,6 +120,12 @@ variable "onify_api_envs" {
         ONIFY_client_secret         = ""
         ONIFY_db_elasticsearch_host   = "http://elasticsearch:9200"
         ONIFY_websockets_agent_url    = "ws://onify-agent:8080/hub"
+        #TZ                           = Europe/Stockholm
+        #DEBUG                        = bpmn*  # For debuging BPMN processes
+        #ONIFY_db_alwaysRefresh       = "true" # For testing purposes
+        #ONIFY_logging_log            = stdout,elastic
+        #ONIFY_logging_logLevel       = "debug" # For testing purposes
+        #ONIFY_logging_elasticFlushInterval = "1000" # For testing purposes  
   }
 }
 variable "onify_app_envs" {
