@@ -1,26 +1,26 @@
 resource "kubernetes_stateful_set" "onify-worker" {
   metadata {
-    name      = "${local.name}-worker"
+    name      = "onify-worker"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app  = "${local.name}-worker"
-      name = "${local.name}-worker"
+      app  = "onify-worker"
+      name = "onify-worker"
     }
   }
   spec {
-    service_name = "${local.name}-worker"
+    service_name = "onify-worker"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${local.name}-worker"
-        task = "${local.name}-worker"
+        app  = "onify-worker"
+        task = "onify-worker"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${local.name}-worker"
-          task = "${local.name}-worker"
+          app  = "onify-worker"
+          task = "onify-worker"
         }
       }
       spec {
@@ -75,7 +75,7 @@ resource "kubernetes_stateful_set" "onify-worker" {
           }
           env_from {
             config_map_ref {
-              name = "${local.name}-api"
+              name = "onify-api"
             }
           }
         }

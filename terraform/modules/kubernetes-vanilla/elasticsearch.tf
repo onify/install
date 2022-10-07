@@ -1,14 +1,14 @@
 resource "kubernetes_service" "elasticsearch" {
   metadata {
-    name      = "${local.name}-elasticsearch"
+    name      = "elasticsearch"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app = "${local.name}"
+      app = "elasticsearch"
     }
   }
   spec {
     selector = {
-      app = "${local.name}-elasticsearch"
+      app = "elasticsearch"
     }
     port {
       name     = "client"
@@ -25,13 +25,12 @@ resource "kubernetes_service" "elasticsearch" {
   depends_on = [kubernetes_namespace.customer_namespace]
 }
 
-
 resource "kubernetes_stateful_set" "elasticsearch" {
   metadata {
-    name      = "${local.name}-elasticsearch"
-    namespace = "${local.name}"
+    name      = "elasticsearch"
+    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app = "${local.name}-elasticsearch"
+      app = "elasticsearch"
     }
   }
   spec {
@@ -40,14 +39,14 @@ resource "kubernetes_stateful_set" "elasticsearch" {
     revision_history_limit = 5
     selector {
       match_labels = {
-        app = "${local.name}-elasticsearch"
+        app = "elasticsearch"
       }
     }
-    service_name = "${local.name}-elasticsearch"
+    service_name = "elasticsearch"
     template {
       metadata {
         labels = {
-          app = "${local.name}-elasticsearch"
+          app = "elasticsearch"
         }
       }
       spec {
@@ -57,7 +56,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           run_as_non_root = true
         }
         container {
-          name  = "${local.name}-elasticsearch"
+          name  = "elasticsearch"
           image = "docker.elastic.co/elasticsearch/elasticsearch:${var.elasticsearch_version}"
 
           port {
@@ -74,7 +73,7 @@ resource "kubernetes_stateful_set" "elasticsearch" {
           }
           env {
             name  = "cluster.name"
-            value = "${local.name}-onify-elasticsearch"
+            value = "onify-elasticsearch"
           }
           dynamic "env" {
             for_each = var.elasticsearch_heapsize != null ? [1] : []

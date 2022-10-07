@@ -1,26 +1,26 @@
 resource "kubernetes_stateful_set" "onify-api" {
   metadata {
-    name      = "${local.name}-api"
+    name      = "onify-api"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app  = "${local.name}-api"
-      name = "${local.name}-api"
+      app  = "onify-api"
+      name = "onify-api"
     }
   }
   spec {
-    service_name = "${local.name}-api"
+    service_name = "onify-api"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${local.name}-api"
-        task = "${local.name}-api"
+        app  = "onify-api"
+        task = "onify-api"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${local.name}-api"
-          task = "${local.name}-api"
+          app  = "onify-api"
+          task = "onify-api"
         }
       }
       spec {
@@ -67,7 +67,7 @@ resource "kubernetes_stateful_set" "onify-api" {
           }
           env_from {
             config_map_ref {
-              name = "${local.name}-api"
+              name = "onify-api"
             }
           }
         }
@@ -79,13 +79,13 @@ resource "kubernetes_stateful_set" "onify-api" {
 
 resource "kubernetes_service" "onify-api" {
   metadata {
-    name      = "${local.name}-api"
+    name      = "onify-api"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
   spec {
     selector = {
-      app  = "${local.name}-api"
-      task = "${local.name}-api"
+      app  = "onify-api"
+      task = "onify-api"
     }
     port {
       name     = "onify-api"

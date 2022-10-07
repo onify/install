@@ -21,27 +21,27 @@ DOCKER
 
 resource "kubernetes_stateful_set" "onify-agent" {
   metadata {
-    name      = "${local.name}-agent"
+    name      = "onify-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
     labels = {
-      app  = "${local.name}-agent"
-      name = "${local.name}"
+      app  = "onify-agent"
+      name = "onify-agent"
     }
   }
   spec {
-    service_name = "${local.name}-agent"
+    service_name = "onify-agent"
     replicas     = var.deployment_replicas
     selector {
       match_labels = {
-        app  = "${local.name}-agent"
-        task = "${local.name}-agent"
+        app  = "onify-agent"
+        task = "onify-agent"
       }
     }
     template {
       metadata {
         labels = {
-          app  = "${local.name}-agent"
-          task = "${local.name}-agent"
+          app  = "onify-agent"
+          task = "onify-agent"
         }
       }
       spec {
@@ -61,14 +61,6 @@ resource "kubernetes_stateful_set" "onify-agent" {
               memory = var.onify-agent_memory_requests
             }
           }
-          #   liveness_probe {
-          #     http_get {
-          #       path = "/health"
-          #       port = 9999
-          #     }
-          #     initial_delay_seconds = 3
-          #     period_seconds        = 3
-          #   }
           port {
             name           = "onify-agent"
             container_port = 8080
@@ -89,14 +81,13 @@ resource "kubernetes_stateful_set" "onify-agent" {
 
 resource "kubernetes_service" "onify-agent" {
   metadata {
-    name      = "${local.name}-agent"
+    name      = "onify-agent"
     namespace = kubernetes_namespace.customer_namespace.metadata.0.name
   }
   spec {
-    //external_traffic_policy = "Local"
     selector = {
-      app  = "${local.name}-agent"
-      task = "${local.name}-agent"
+      app  = "onify-agent"
+      task = "onify-agent"
     }
     port {
       name     = "onify-agent"
