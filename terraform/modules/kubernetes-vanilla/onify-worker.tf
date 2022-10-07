@@ -53,6 +53,13 @@ resource "kubernetes_stateful_set" "onify-worker" {
             }
           }
           dynamic "env" {
+            for_each = var.onify_api_worker_defaults
+            content {
+              name  = env.key
+              value = env.value
+            }
+          }
+          dynamic "env" {
             for_each = var.onify_worker_envs
             content {
               name  = env.key

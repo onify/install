@@ -1,16 +1,3 @@
-resource "kubernetes_config_map" "onify-api" {
-  metadata {
-    name      = "${local.name}-api"
-    namespace = kubernetes_namespace.customer_namespace.metadata.0.name
-  }
-
-  data = {
-    ONIFY_db_elasticsearch_host = "http://${local.name}-elasticsearch:9200"
-    ONIFY_websockets_agent_url  = "ws://${local.name}-agent:8080/hub"
-  }
-  depends_on = [kubernetes_namespace.customer_namespace]
-}
-
 resource "kubernetes_stateful_set" "onify-api" {
   metadata {
     name      = "${local.name}-api"
@@ -59,6 +46,13 @@ resource "kubernetes_stateful_set" "onify-api" {
           }
           dynamic "env" {
             for_each = var.onify_default_envs
+            content {
+              name  = env.key
+              value = env.value
+            }
+          }
+           dynamic "env" {
+            for_each = var.onify_api_worker_defaults
             content {
               name  = env.key
               value = env.value

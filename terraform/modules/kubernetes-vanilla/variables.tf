@@ -98,7 +98,7 @@ variable "onify_default_envs" {
         INTERPRET_CHAR_AS_DOT       = "_"
   }
 }
-variable "onify_api_envs" {
+variable "onify_api_worker_defaults" {
     type = map(string)
     default = {
         ONIFY_db_indexPrefix        = "onify" # indices will be prefixed with this string
@@ -107,6 +107,11 @@ variable "onify_api_envs" {
         ONIFY_resources_baseDir     = "/usr/share/onify/resources"
         ONIFY_resources_tempDir     = "/usr/share/onify/temp_resources"
         ONIFY_autoinstall           = true
+  }
+}
+variable "onify_api_envs" {
+    type = map(string)
+    default = {
         ONIFY_client_code           = "xxxx"
         ONIFY_client_instance       = "xxxx"
         ONIFY_initialLicense        = "xxxx"
@@ -115,13 +120,12 @@ variable "onify_api_envs" {
         ONIFY_client_secret         = ""
   }
 }
-
 variable "onify_app_envs" {
     type = map(string)
     default = {
-    ONIFY_api_externalUrl       = "/api/v2"
-    ONIFY_disableAdminEndpoints = false
-    ONIFY_api_admintoken        = "xx"
+    	ONIFY_api_externalUrl       = "/api/v2"
+   	ONIFY_disableAdminEndpoints = false
+    	ONIFY_api_admintoken        = "xx"
   }
 }
 variable "onify_worker_envs" {

@@ -1,15 +1,3 @@
-resource "kubernetes_config_map" "onify-app" {
-  metadata {
-    name      = "${local.name}-app"
-    namespace = "${local.name}"
-  }
-
-  data = {
-    ONIFY_api_internalUrl = "http://${local.name}-api:8181/api/v2"
-  }
-  depends_on = [kubernetes_namespace.customer_namespace]
-}
-
 resource "kubernetes_stateful_set" "onify-app" {
   metadata {
     name      = "${local.name}-app"
