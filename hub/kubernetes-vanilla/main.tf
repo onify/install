@@ -24,6 +24,8 @@ module "onify" {
     ONIFY_client_secret           = "xxx"
   }
   onify_app_envs                    = {
-    ONIFY_api_admintoken          = "xxx"
+    ONIFY_api_externalUrl       = "/api/v2"
+    ONIFY_disableAdminEndpoints = false
+    ONIFY_api_admintoken        = "xx"
   }
 }
