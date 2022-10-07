@@ -22,13 +22,13 @@ module "onify" {
     ONIFY_adminUser_password      = "xxx"
     ONIFY_apiTokens_app_secret    = "xxx"
     ONIFY_client_secret           = "xxx"
-    ONIFY_db_elasticsearch_host   = "http://onify-${var.client_code}-${var.client_instance}:9200"
-    ONIFY_websockets_agent_url    = "ws://onify-${var.client_code}-${var.client_instance}-agent:8080/hub"
+    ONIFY_db_elasticsearch_host   = "http://elasticsearch:9200"
+    ONIFY_websockets_agent_url    = "ws://onify-agent:8080/hub"
   }
   onify_app_envs                    = {
     ONIFY_api_externalUrl       = "/api/v2"
     ONIFY_disableAdminEndpoints = false
     ONIFY_api_admintoken        = "xx"
-    ONIFY_api_internalUrl       = "onify-${var.client_code}-${var.client_instance}-api:8181/api/v2"
+    ONIFY_api_internalUrl       = "http://onify-api:8181/api/v2"
   }
 }
