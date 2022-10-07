@@ -19,9 +19,9 @@ module "onify" {
     ONIFY_websockets_agent_url    = "ws://onify-agent:8080/hub"
   }
   onify_app_envs                    = {
-    ONIFY_api_externalUrl       = "/api/v2"
-    ONIFY_disableAdminEndpoints = false
     ONIFY_api_admintoken        = "xx"
+    ONIFY_api_externalUrl       = "/api/v2"
     ONIFY_api_internalUrl       = "http://onify-api:8181/api/v2"
+    ONIFY_disableAdminEndpoints = false
   }
 }

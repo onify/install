@@ -24,4 +24,4 @@ This is just an example to get all containers up and running in a k8s environmen
 
 Use port forwarding to test the app and login with username and password.
 
-`kubectl port-forward --address localhost deployments/onify-{CLIENT CODE}-{INSTANCE CODE}-app 3000:3000 -n onify-{CLIENT CODE}-{INSTANCE CODE}`
+`kubectl port-forward --address localhost pod/onify-app-0 3000:3000 -n onify-{CLIENT CODE}-{INSTANCE CODE}`
