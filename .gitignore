@@ -43,3 +43,4 @@ terraform.exe
 *.sh
 *.OLD
 kubeconfig*
+test.tf
