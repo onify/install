@@ -34,16 +34,16 @@ variable "elasticsearch_version" {
     default = "7.16.1"
 }
 variable "onify-api_memory_limit" {
-    default = "100Mi"
+    default = "250Mi"
 }
 variable "onify-api_cpu_limit" {
-    default = "100m"
+    default = "200m"
 }
 variable "onify-api_memory_requests" {
-    default = "100Mi"
+    default = "250Mi"
 }
 variable "onify-api_cpu_requests" {
-    default = "100m"
+    default = "200m"
 }
 variable "onify-agent_memory_limit" {
     default = "100Mi"
@@ -58,16 +58,16 @@ variable "onify-agent_cpu_requests" {
     default = "100m"
 }
 variable "onify-worker_memory_limit" {
-    default = "100Mi"
+    default = "250Mi"
 }
 variable "onify-worker_cpu_limit" {
-    default = "100m"
+    default = "200m"
 }
 variable "onify-worker_memory_requests" {
-    default = "100Mi"
+    default = "250Mi"
 }
 variable "onify-worker_cpu_requests" {
-    default = "100m"
+    default = "200m"
 }
 variable "onify-app_memory_limit" {
     default = "100Mi"
