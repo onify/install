@@ -29,6 +29,6 @@ module "onify" {
     ONIFY_api_externalUrl       = "/api/v2"
     ONIFY_disableAdminEndpoints = false
     ONIFY_api_admintoken        = "xx"
-    ONIFY_api_internalUrl       = "${onify-${var.client_code}-${var.client_instance}-api:8181/api/v2"
+    ONIFY_api_internalUrl       = "onify-${var.client_code}-${var.client_instance}-api:8181/api/v2"
   }
 }
