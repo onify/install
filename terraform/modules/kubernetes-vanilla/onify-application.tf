@@ -58,12 +58,6 @@ resource "kubernetes_stateful_set" "onify-app" {
               value = env.value
             }
           }
-          env_from {
-            config_map_ref {
-              name = "onify-app"
-            }
-          }
-
         }
       }
     }

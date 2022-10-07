@@ -73,11 +73,6 @@ resource "kubernetes_stateful_set" "onify-worker" {
               value = env.value
             }
           }
-          env_from {
-            config_map_ref {
-              name = "onify-api"
-            }
-          }
         }
       }
     }
