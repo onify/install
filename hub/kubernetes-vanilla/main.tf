@@ -1,10 +1,3 @@
-/*
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-  config_context = "gke_onify-forge_europe-north1-a_onify-demo-gke"
-}
-*/
-
 variable "client_code" {
     default = "xxx" // Contact your local partner or support@onify.co to get this information
 }
