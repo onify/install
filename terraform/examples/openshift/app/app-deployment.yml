@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onify-app
+  labels:
+    app: onify
+    tier: app
+spec:
+  selector:
+    matchLabels:
+      app: onify
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: onify
+        tier: app
+    spec:
+      imagePullSecrets:
+      - name: onify-regcred
+      containers:
+      - name: app
+        image: eu.gcr.io/onify-images/hub/app:latest # IMPORTANT: replace with desired version
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: ENV_PREFIX
+          value: ONIFY_
+        - name: INTERPRET_CHAR_AS_DOT
+          value: _
+        - name: ONIFY_api_internalUrl
+          value: http://onify-api:8181/api/v2
+        - name: ONIFY_api_externalUrl
+          value: /api/v2
+        - name: ONIFY_api_admintoken
+           valueFrom:
+            secretKeyRef:
+              name: onify-app-secrets
+              key: api_token
+        ports:
+        - name: app
+          containerPort: 3000

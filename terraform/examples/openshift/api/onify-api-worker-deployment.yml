@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onify-worker
+  labels:
+    app: onify
+    tier: worker
+spec:
+  selector:
+    matchLabels:
+      app: onify
+      tier: worker
+  template:
+    metadata:
+      labels:
+        app: onify
+        tier: worker
+    spec:
+      imagePullSecrets:
+       - name: onify-regcred
+      containers:
+      - name: worker
+        image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
+        args:
+        - worker # act as worker
+        envFrom:
+        - configMapRef:
+            name: onify-api-config
+        env:
+        - name: ONIFY_worker_cleanupInterval # interval to clean up temporary files, in seconds
+          value: "300"
+        - name: ONIFY_adminUser_password
+          valueFrom:
+            secretKeyRef:
+              name: onify-api-secrets
+              key: admin_password
+        - name: ONIFY_apiTokens_app_secret
+          valueFrom:
+            secretKeyRef:
+              name: onify-api-secrets
+              key: app_token_secret
+        - name: ONIFY_client_secret
+          valueFrom:
+            secretKeyRef:
+              name: onify-api-secrets
+              key: client_secret
+        volumeMounts:
+        - name: resources
+          mountPath: /usr/share/onify
+      volumes:
+        - name: resources
+          persistentVolumeClaim:
+            claimName: onify-resources-pvc

@@ -1,0 +1,93 @@
+version: '3.7'
+
+x-shared-api-variables: &shared-api-variables
+  NODE_ENV: development
+  ENV_PREFIX: ONIFY_
+  INTERPRET_CHAR_AS_DOT: _
+  ONIFY_logging_log: stdout
+  ONIFY_db_elasticsearch_host: http://linked-elasticsearch:9200
+  ONIFY_db_indexPrefix: dev
+  ONIFY_client_secret: ${API_CLIENT_SECRET}
+  ONIFY_client_code: ${API_CLIENT_CODE} # Contact Onify at support@onify.co for this
+  ONIFY_client_instance: ${API_CLIENT_INSTANCE} # Contact Onify at support@onify.co for this
+  ONIFY_initialLicense: ${LICENSE} # Contact Onify at support@onify.co for license
+  ONIFY_adminUser_username: admin
+  ONIFY_adminUser_password: ${ADMIN_PASSWORD}
+  ONIFY_adminUser_email: admin@onify.local
+  ONIFY_apiTokens_app_secret: ${API_APP_SECRET}
+  ONIFY_logging_logLevel: debug
+  ONIFY_resources_baseDir: ./data/resources
+  ONIFY_resources_tempDir: ./data/storage
+  ONIFY_websockets_agent_url: ws://linked-agent-server:8080/hub
+
+x-shared-api-volumes: &shared-api-volumes # make sure the paths exist
+  - ./tmp/resources:/usr/app/data
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    ports:
+      - 9200:9200
+    environment:
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # can be increased but make sure it doesn't exceed docker limits
+      - discovery.type=single-node
+      - cluster.name=onify
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5m
+      retries: 30
+    volumes: 
+       - ./tmp/elasticsearch:/usr/share/elasticsearch/data
+  agent-server:
+    image: eu.gcr.io/onify-images/hub/agent-server:latest # IMPORTANT: replace with desired version
+    environment:
+      hub_version: v2
+      log_level: "2"
+      log_type: "2"
+    ports:
+      - 8080:8080
+  api:
+    image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
+    restart: always
+    depends_on:
+      - elasticsearch
+    environment:
+      <<: *shared-api-variables
+      ONIFY_autoinstall: "true"
+    ports:
+      - 8181:8181
+    links:
+      - elasticsearch:linked-elasticsearch
+      - agent-server:linked-agent-server
+    volumes: *shared-api-volumes
+  worker:
+    image: eu.gcr.io/onify-images/hub/api:latest # IMPORTANT: replace with desired version
+    command: worker
+    restart: always
+    depends_on:
+      - elasticsearch
+    environment:
+      <<: *shared-api-variables
+      ONIFY_worker_cleanupInterval: "30"
+    links:
+      - elasticsearch:linked-elasticsearch
+      - agent-server:linked-agent-server
+    volumes: *shared-api-volumes
+  app:
+    image: eu.gcr.io/onify-images/hub/app:latest # IMPORTANT: replace with desired version
+    restart: always
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: development
+      ENV_PREFIX: ONIFY_
+      INTERPRET_CHAR_AS_DOT: _
+      ONIFY_api_admintoken: ${APP_API_TOKEN}
+      ONIFY_api_internalUrl: http://linked-api:8181/api/v2
+      ONIFY_api_externalUrl: /api/v2
+      ONIFY_disableAdminEndpoints: "false"
+    links:
+      - api:linked-api
+    ports:
+      - 3000:3000

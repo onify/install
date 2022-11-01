@@ -1,0 +1,44 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: onify-dev
+  namespace: onify
+spec:
+  host: onify-dev.onify.net
+  to:
+    kind: Service
+    name: onify-app
+    weight: 100
+  port:
+    targetPort: onify-app
+  tls:
+    termination: edge
+    certificate: |-
+      -----BEGIN CERTIFICATE-----
+      insert
+      -----END CERTIFICATE-----
+    key: |-
+      -----BEGIN PRIVATE KEY-----
+      insert
+      -----END PRIVATE KEY-----
+    caCertificate: |-
+      -----BEGIN CERTIFICATE-----
+      insert
+      -----END CERTIFICATE-----
+      -----BEGIN CERTIFICATE-----
+      insert
+      -----END CERTIFICATE-----
+      -----BEGIN CERTIFICATE-----
+      insert
+      -----END CERTIFICATE-----
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: onify-dev.onify.net
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps.ocp-prod-0.k8s.onify.net

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onify-api-config
+data:
+  NODE_ENV: production
+  ENV_PREFIX: ONIFY_ 
+  INTERPRET_CHAR_AS_DOT: _
+  ONIFY_db_elasticsearch_host: http://elasticsearch:9200
+  ONIFY_db_indexPrefix: onify 
+  ONIFY_client_code: <client_code>
+  ONIFY_client_instance: <client_instance>
+  ONIFY_evaluationLicense: <license>
+  ONIFY_adminUser_username: admin
+  ONIFY_adminUser_email: admin@onify.local
+  ONIFY_resources_baseDir: /usr/share/onify/resources
+  ONIFY_resources_tempDir: /usr/share/onify/temp_resources
+  ONIFY_websockets_agent_url: ws://agent-server:8080/hub
