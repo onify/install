@@ -14,15 +14,24 @@ provider "kubernetes" {
 
 module "onify-client-instance" {
   source = "github.com/onify/terraform//modules/onify-customer" // Source for Terraform modules
-  gcr_registry_keyfile = "./keyfile.json" // Path to keyfile to access container images in GCR
+  gcr_registry_keyfile            = "./keyfile.json" // Contact your local partner or support@onify.co to get this information
+  onify_api_envs                  = {
+    ONIFY_client_code             = var.client_code
+    ONIFY_client_instance         = var.client_instance
+    ONIFY_initialLicense          = "xxx"
+    ONIFY_adminUser_password      = "xxx"
+    ONIFY_apiTokens_app_secret    = "xxx"
+    ONIFY_client_secret           = "xxx"
+    ONIFY_db_elasticsearch_host   = "http://elasticsearch:9200"
+    ONIFY_websockets_agent_url    = "ws://onify-agent:8080/hub"
+  }
+  onify_app_envs                    = {
+    ONIFY_api_admintoken        = "xxx"
+    ONIFY_api_externalUrl       = "/api/v2"
+    ONIFY_api_internalUrl       = "http://onify-api:8181/api/v2"
+    ONIFY_disableAdminEndpoints = false
+  }
 
-  onify_client_code = "<CLIENT CODE>" // ENV = ONIFY_client_code
-  onify_instance = "<INSTANCE CODE>" // ENV = ONIFY_client_instance
-  onify-api_admin_password = "<ADMIN PASSWORD>" // ENV = ONIFY_adminUser_password
-  onify-api_app_token = "Bearer <API ADMIN TOKEN>" // ENV = ONIFY_api_admintoken
-  onify-api_client_secret = "<CLIENT SECRET>" // ENV = ONIFY_client_secret
-  onify-api_secret = "<API ADMIN APP SECRET>" // ENV = ONIFY_apiTokens_app_secret
-  onify-api_license = "<ONIFY LICENSE>" // ENV = ONIFY_initialLicense
   ssl_staging = true // Letencrypt staging API or not
     
   // -- Onify Agent --

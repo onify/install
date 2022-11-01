@@ -1,5 +1,5 @@
 variable "name" {
-  default = "k8s-example"
+  default = "example"
 }
 variable "gce_project_id" {
   default = "onify-forge"
@@ -12,19 +12,19 @@ variable "gce_zone" {
 }
 
 #CREATE BACKEND
-module "gcs" {
-  source            = "github.com/onify/terraform//modules/gcs"
-  name              = "${var.name}-terraform"
-  gce_project_id    = "onify-forge"
-}
+#imodule "gcs" {
+#  source            = "github.com/onify/terraform//modules/gcs"
+#  name              = "${var.name}-terraform"
+#  gce_project_id    = "onify-forge"
+#}
 
 ### CAN ONLY BE USED IF MODULE GCS EXISTS
-terraform {
-  backend "gcs" {
-    bucket = "k8s-example-terraform"
-    prefix = "terraform/state/k8s-example"
-  }
-}
+#terraform {
+#  backend "gcs" {
+#    bucket = "k8s-example-terraform"
+#    prefix = "terraform/state/k8s-example"
+#  }
+#}
 
 module "gce" {
   source           = "github.com/onify/terraform//modules/gce"
@@ -45,9 +45,10 @@ module "gce" {
     ]
 }
 
-provider "kubernetes" {
-  experiments {
-    manifest_resource = true
-  }
-  config_path    = "kubeconfig_${var.name}"
-}
+#could be used instead of KUBE_CONFIG_PATH env variable
+#provider "kubernetes" {
+#  experiments {
+#    manifest_resource = true
+#  }
+#  config_path    = "${path.module}/kubeconfig_${var.name}"
+#}
