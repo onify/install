@@ -9,8 +9,8 @@ We have provided some example [manifests](/hub/kubernetes/manifests/).
 
 ### Standard
 
-Our standard installation example includes storage and ingress (Traefik).
-See [manifests](/hub/kubernetes/example.tf).
+Our standard installation example includes storage and ingress (nginx).
+See [manifests](/hub/terraform).
 
 ### Vanilla
 

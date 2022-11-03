@@ -9,8 +9,7 @@ This is just an example to get all containers up and running in a k8s environmen
 
 1. A working kubernetes installation. Terraform will apply Onify against the default kubernetes context. Override by setting ```export KUBE_CONFIG_PATH=kubeconfig_file```
 
-2. Terraform variables ```client_code``` and ```client_instance``` must be set either directly in main.tf or by exporting environmental variables  ```TF_VAR_client_code=company TF_VAR_client_instance=demo terraform apply```
-3. A gcr registry file containing credentials to download the onify gcr images
+2. A gcr registry file containing credentials to download the onify gcr images
 
 > Note: It is recommended to use a remote backend for terraform state.
 

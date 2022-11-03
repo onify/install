@@ -13,7 +13,7 @@ Please see matrix for all [containers](/containers.md) required for Onify Hub.
 - Install in [Docker](/hub/docker)
 - Install in [OpenShift](/hub/openshift)
 - Install in [Linux](/hub/linux)
-- Install using [Terraform](/terraform/examples)
+- Install using [Terraform](/hub/terraform)
 
 # Onify Agent
 
