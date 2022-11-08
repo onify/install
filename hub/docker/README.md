@@ -10,6 +10,7 @@ To retreive images from the onify registry you need a registry secret. Contact O
 * hub/api
 * hub/app
 * hub/agent-server
+* hub/functions (optional)
 
 # Preparations
 

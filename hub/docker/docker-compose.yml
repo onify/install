@@ -4,7 +4,8 @@ x-shared-api-variables: &shared-api-variables
   NODE_ENV: development
   ENV_PREFIX: ONIFY_
   INTERPRET_CHAR_AS_DOT: _
-  ONIFY_logging_log: stdout
+  ONIFY_logging_log: stdout # stdout,elastic
+  #ONIFY_db_alwaysRefresh: "true" # For testing purposes
   ONIFY_db_elasticsearch_host: http://linked-elasticsearch:9200
   ONIFY_db_indexPrefix: dev
   ONIFY_client_secret: ${API_CLIENT_SECRET}
@@ -29,7 +30,7 @@ services:
     ports:
       - 9200:9200
     environment:
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m # can be increased but make sure it doesn't exceed docker limits
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g # can be increased but make sure it doesn't exceed docker limits
       - discovery.type=single-node
       - cluster.name=onify
     healthcheck:
@@ -91,3 +92,9 @@ services:
       - api:linked-api
     ports:
       - 3000:3000
+  functions: # optional
+    image: eu.gcr.io/onify-images/hub/functions:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - 8282:8282
