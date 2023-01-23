@@ -68,7 +68,7 @@ echo "Bearer $(echo -n "app:$API_APP_SECRET" | base64)"
 
 or Windows (Powershell):
 ```powershell
-$API_APP_SECRET=<Onify hub app secret>
+$API_APP_SECRET="<Onify hub app secret>"
 "Bearer " + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("app:" + $API_APP_SECRET))
 ```
 
