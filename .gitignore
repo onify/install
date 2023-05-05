@@ -40,7 +40,7 @@ override.tf.json
 whoami.tf
 terraform.exe
 *.BAK
-*.sh
+##*.sh
 *.OLD
 kubeconfig*
 test.tf
