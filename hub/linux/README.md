@@ -17,7 +17,7 @@ sudo systemctl enable --now snapd.socket
 sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-## 2. Install MicroK8s
+# 2. Install MicroK8s
 
 ```bash
 sudo snap install microk8s --classic
