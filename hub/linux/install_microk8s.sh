@@ -31,6 +31,7 @@ installMicrok8s() {
     microk8s status --wait-ready >> /dev/null
     microk8s enable dns
     microk8s enable ingress
+    microk8s enable hostpath-storage
 }
 
 postTasks() {
