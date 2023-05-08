@@ -1,44 +1,38 @@
 Install Onify Hub in Linux
 ==========================
 
-Installing Onify Hub on a single Linux machine requires [Microk8s](https://microk8s.io/).
+Installing Onify Hub on a single Linux machine requires [Microk8s](https://microk8s.io/), terraform.
 
-# Preparations
 
-1. Install snapd (if not installed)
-2. Install Microk8s
-3. Install Onify 
+1. Install Microk8s and terraform
 
-# 1. Install snapd
+2. (OPTIONAL: For custom TLS certifcate)
 
-```bash
-sudo yum install snapd
-sudo systemctl enable --now snapd.socket
-sudo ln -s /var/lib/snapd/snap /snap
+3. Install Onify
+
+
+1a. Install and configure microk8s and terraform with:
+```
+curl -L https://raw.githubusercontent.com/onify/install/default/hub/linux/install_microk8s.sh | bash
 ```
 
-# 2. Install MicroK8s
 
-```bash
-sudo snap install microk8s --classic
-```
+2a. Custom TLS
+1. Create a kubernetes secret manifest file container certificate and key. Example in repo.
 
-## Configure MicroK8s
+2. apply secret with:
+  ```kubectl apply -f custom_tls_example.yaml```
 
-### Enable DNS
+3. set variable
+```tls = "onify-custom"``` in terraform.tf
 
-```bash
-microk8s.enable dns
-```
 
-> If you have issues with MicroK8s default DNS (8.8.8.8 and 8.8.4.4), you need to change this, see [MicroK8s Add-on dns](https://microk8s.io/docs/addon-dns).
+3a. Install Onify with terraform
 
-### Set kubetcl alias
+1. Create a `terraform.tf` terraform file (example in this repo)
+  ab. create a keyfile.json with credentials to pull onify images. (Needed to pull images from containerregistry)
 
-```bash
-snap alias microk8s.kubectl kubectl
-```
+2. Run ```terraform init``` to download Onify terraform modules
 
-# 3. Install Onify 
+3. Run ```terraform apply``` to apply Onify infrastructure
 
-[Setup Onify using Kubernetes](https://github.com/onify/install/tree/default/hub/kubernetes)
