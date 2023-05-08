@@ -43,7 +43,7 @@ postTasks() {
  microk8s config > kubeconfig
  microk8s stop && microk8s start
  echo "microk8s installed and configured"
- echo "run export KUBECONFIG=kubeconfig to configure kubectl"
+ echo "KUBECONFIG=kubeconfig" >> ~/.bashrc
 
 }
 
