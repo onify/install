@@ -43,8 +43,8 @@ postTasks() {
  microk8s config > kubeconfig
  microk8s stop && microk8s start
  echo "microk8s installed and configured"
- echo "KUBECONFIG=kubeconfig" >> ~/.bashrc
-
+ echo "export KUBECONFIG=kubeconfig" >> .bashrc
+ source .bashrc
 }
 
 cd "$(dirname "$0")"
