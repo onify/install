@@ -24,7 +24,9 @@ preparation() {
 
     iptables -P FORWARD ACCEPT
     mkdir -p /usr/share/elasticsearch/data
-    #chown 1000:2000 /usr/share/elasticsearch/data
+    mkdir -p /usr/share/elasticsearch/data/nodes
+    chown 1000:2000 /usr/share/elasticsearch/data
+    chown 1000:2000 /usr/share/elasticsearch/data/nodes
 
 }
 
