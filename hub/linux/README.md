@@ -24,13 +24,13 @@ curl -L https://raw.githubusercontent.com/onify/install/default/hub/linux/instal
   ```kubectl apply -f custom_tls_example.yaml```
 
 3. set variable
-```tls = "onify-custom"``` in terraform.tf
+```tls = "onify-custom"``` in terraform.tf at step 3
 
 
 3a. Install Onify with terraform
 
 1. Create a `terraform.tf` terraform file (example in this repo)
-  ab. create a keyfile.json with credentials to pull onify images. (Needed to pull images from containerregistry)
+  _create a keyfile.json with credentials to pull onify images. (Needed to pull images from containerregistry)_
 
 2. Run ```terraform init``` to download Onify terraform modules
 
