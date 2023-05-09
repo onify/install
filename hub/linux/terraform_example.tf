@@ -35,6 +35,6 @@ module "onify" {
     ONIFY_disableAdminEndpoints = false
   }
   gke = false
-  elasticsearch_heapsize = "256m"
+  elasticsearch_heapsize = "1g"
   tls = "onify-custom"
 }
