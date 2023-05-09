@@ -41,7 +41,7 @@ resource "kubernetes_stateful_set" "onify-app" {
         }
         container {
           image = "eu.gcr.io/onify-images/hub/app:${var.onify-app_version}"
-          name  = "onfiy-api"
+          name  = "onify-api"
           resources {
             limits = {
               cpu    = var.onify-app_cpu_limit

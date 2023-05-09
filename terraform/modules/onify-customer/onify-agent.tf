@@ -50,7 +50,7 @@ resource "kubernetes_stateful_set" "onify-agent" {
         }
         container {
           image = "eu.gcr.io/onify-images/hub/agent-server:${var.onify-agent_version}"
-          name  = "onfiy-agent"
+          name  = "onify-agent"
           resources {
             limits = {
               cpu    = var.onify-agent_cpu_limit

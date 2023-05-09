@@ -29,7 +29,7 @@ resource "kubernetes_stateful_set" "onify-functions" {
         }
         container {
           image = "eu.gcr.io/onify-images/hub/functions:latest"
-          name  = "onfiy-functions"
+          name  = "onify-functions"
           port {
             name           = "onify-functions"
             container_port = 8181
