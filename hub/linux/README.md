@@ -16,6 +16,7 @@ Installing Onify Hub on a single Linux machine requires [Microk8s](https://micro
 curl -L https://raw.githubusercontent.com/onify/install/default/hub/linux/install_microk8s.sh | bash
 ```
 
+> Note: You might need to run `export KUBECONFIG=kubeconfig` to get `kubectl` working. 
 
 2a. Custom TLS
 1. Create a kubernetes secret manifest file container certificate and key. Example in repo.
