@@ -1,28 +1,18 @@
-Install Onify Hub in Docker
-===========================
+# Install Onify on Docker
 
-Use docker compose to run your hub.
+> Note: This documentation is mainly to get a development environment up and running. If you want to run Onify on Docker in prod, you need to setup nginx etc. 
 
-# Images
+## Prerequisites
 
-To retreive images from the onify registry you need a registry secret. Contact Onify at support@onify.co for this.
+### Docker
 
-* hub/api
-* hub/app
-* hub/agent-server
-* hub/functions (optional)
+You need to have Docker installed, like [Docker Swarm](https://docs.docker.com/get-started/swarm-deploy/) or [Docker Desktop](https://www.docker.com/products/docker-desktop/). 
 
-# Preparations
+### Access to container images
 
-Some preparations is required to run in docker.
+You need access to the Onify Hub container images located at Google Container Registry (`eu.gcr.io`). For this you need a `keyfile.json`. Please contact `support@onify.co` for more info.
 
-## Image registry secret
-
-Onify images are stored in a registry that requires authentication to access.
-
-Request your image registry secret from support@onify.co and save as `keyfile.json` in this directory
-
-Login to docker with:
+Login to Docker with:
 
 For OSX or Linux
 ```sh
@@ -34,29 +24,15 @@ or Windows (cmd)
 docker login -u _json_key --password-stdin https://eu.gcr.io/onify-images < keyfile.json
 ```
 
-## Env file
+> Note: You might also need access to GitHub Container Registry (`ghcr.io`). You need a username and a personal access token (PAT) for this.
 
-Add a file named `.env` in the same directory. Prepare the file with environment variables required for the docker compose manifest:
+## Installation
 
-```
-ADMIN_PASSWORD=<administrator password>
-APP_API_TOKEN=
-API_APP_SECRET=<Onify hub app secret>
-API_CLIENT_SECRET=<sign secret>
-API_CLIENT_CODE=
-API_CLIENT_INSTANCE=
-LICENSE=
-```
+1. Create a `.env` file (see `.env.example`) containing all environment variables
+2. Check that you have the environments in place by calling `docker-compose config` (optional)
+3. Start Onify Hub by calling `docker-compose up`
 
-- `ADMIN_PASSWORD`: administrator password. Minimum 8 chars and maximum 100 chars. Requires both uppercase and lowercase letters and must also contain digits and symbols
-- `API_CLIENT_SECRET`: secret string used for signing, previously known as private key. If a migration is imminent: use the same secret as the old environment
-- `API_APP_SECRET`: hub app application secret for the api, generate your own very secret key
-- `APP_API_TOKEN`: [Api token](#api-token) used by app for backend communication
-- `API_CLIENT_CODE`: Client code, decided by Onify when generating license
-- `API_CLIENT_INSTANCE`:  Client instance (or purpose), decided by Onify when generating license
-- `LICENSE`: [Onify license](#onify-license)
-
-### Api-token
+### API TOKEN
 
 Token used to authenticate app backend with api. Generated api token from `API_APP_SECRET`:
 
@@ -74,33 +50,9 @@ $API_APP_SECRET="<Onify hub app secret>"
 
 Add the result as `APP_API_TOKEN` value in `.env` file where the value is surrounded by quotes.
 
-### Onify License
+## Troubleshooting
 
-Get your Onify docker license key, client code, and client instance from support@onify.co and add them as values for `LICENSE`, `API_CLIENT_CODE`, and `API_CLIENT_INSTANCE` the `.env` file.
-
-```
-ADMIN_PASSWORD=<administrator password>
-API_APP_SECRET=<Onify hub app secret>
-APP_API_TOKEN="<Onify hub app api token>"
-API_CLIENT_SECRET=<sign secret>
-API_CLIENT_CODE=<Client code from Onify>
-API_CLIENT_INSTANCE=<Client instance from Onify>
-LICENSE=<Onify license>
-```
-
-# Start Onify Hub in docker
-
-Check that you have the environments in place by calling:
-
-```sh
-docker-compose config
-```
-
-Start the hub by calling:
-
-```sh
-docker-compose up
-```
+### Testing app and api
 
 Hub is exposed as:
 
@@ -115,19 +67,12 @@ docker-compose up -d elasticsearch agent-server
 docker-compose up api worker app
 ```
 
-Pull new images by:
+### Reset everything
 
-```sh
-docker-compose pull
-```
-
-# Reset Hub
-
-To reset the entire hub you can delete the indices.
+To reset the entire Hub you can delete the Elasticsearch indices.
 
 ```sh
 curl -XDELETE http://localhost:9200/*
 ```
 
 The api will crash and restart and you are back to square 1.
-
