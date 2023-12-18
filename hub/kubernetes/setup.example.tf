@@ -20,6 +20,12 @@
 # DEFINE VARIABLES (.tfvars)
 variable "ghcr_registry_username" {}
 variable "ghcr_registry_password" {}
+variable "onify_api_license" {}
+variable "onify_api_admin_username" {}
+variable "onify_api_admin_password" {}
+variable "onify_api_app_secret" {}
+variable "onify_api_client_secret" {}
+variable "onify_app_api_admin_token" {}
 
 module "onify-client-instance" {
   source                 = "github.com/onify/terraform//modules/onify-customer-helix"
@@ -37,17 +43,17 @@ module "onify-client-instance" {
     ENV_PREFIX                         = "ONIFY_"
     INTERPRET_CHAR_AS_DOT              = "_"
     ONIFY_db_indexPrefix               = "onify"
-    ONIFY_adminUser_username           = "admin"
     ONIFY_adminUser_email              = "admin@onify.local"
     ONIFY_resources_baseDir            = "/usr/share/onify/resources"
     ONIFY_resources_tempDir            = "/usr/share/onify/temp_resources"
     ONIFY_autoinstall                  = true
     ONIFY_client_code                  = "oni"
     ONIFY_client_instance              = "dev"
-    ONIFY_initialLicense               = "***"
-    ONIFY_adminUser_password           = "***"
-    ONIFY_apiTokens_app_secret         = "***"
-    ONIFY_client_secret                = "***"
+    ONIFY_initialLicense               = var.onify_api_license
+    ONIFY_adminUser_username           = var.onify_api_admin_username
+    ONIFY_adminUser_password           = var.onify_api_admin_password
+    ONIFY_apiTokens_app_secret         = var.onify_api_app_secret
+    ONIFY_client_secret                = var.onify_api_client_secret
     #ONIFY_worker_cleanupInterval       = "300"
     #ONIFY_logging_logLevel             = "debug" # Default is "info"
     ONIFY_logging_log                  = "stdout" # Or "stdout,elastic"
@@ -57,7 +63,7 @@ module "onify-client-instance" {
     NODE_ENV                    = "production"
     ENV_PREFIX                  = "ONIFY_"
     INTERPRET_CHAR_AS_DOT       = "_"
-    ONIFY_api_admintoken        = "***"
+    ONIFY_api_admintoken        = var.onify_app_api_admin_token
     ONIFY_api_externalUrl       = "/api/v2"
     #ONIFY_disableAdminEndpoints = true
   }

@@ -35,6 +35,8 @@ curl -L https://raw.githubusercontent.com/onify/install/default/hub/kubernetes/i
 
 You can add your own custom cert instead of default [Let's Encrypt](https://letsencrypt.org/). Create a Kubernetes secret manifest file container certificate and key. Here is an example:
 
+
+Create a file called `custom_tls_example.yaml` containing:
 ```yaml
 apiVersion: v1
 kind: Secret
