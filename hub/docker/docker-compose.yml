@@ -98,9 +98,11 @@ services:
     restart: always
     ports:
       - 8282:8282
+# --- IF YOU WANT TO USE ONIFY HELIX, UNCOMMENT THESE LINES ---
 #  helix:
-#    image: eu.gcr.io/onify-images/hub/helix:latest
+#    image: ghcr.io/onify/helix-app:latest # IMPORTANT: replace with your custom Helix image
 #    pull_policy: always
 #    restart: always
 #    ports:
 #      - 4000:4000
+# --- IF YOU WANT TO USE ONIFY HELIX, UNCOMMENT THESE LINES ---

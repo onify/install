@@ -6,7 +6,7 @@
 
 ### Docker
 
-You need to have Docker installed, like [Docker Swarm](https://docs.docker.com/get-started/swarm-deploy/) or [Docker Desktop](https://www.docker.com/products/docker-desktop/). 
+You need to have Docker installed, see https://docs.docker.com/engine/install/. 
 
 ### Access to container images
 
@@ -24,7 +24,7 @@ or Windows (cmd)
 docker login -u _json_key --password-stdin https://eu.gcr.io/onify-images < keyfile.json
 ```
 
-> Note: You might also need access to GitHub Container Registry (`ghcr.io`). You need a username and a personal access token (PAT) for this.
+> Note: You might also need access to GitHub Container Registry (`ghcr.io`) for Onify Helix. You need a username and a personal access token (PAT) for this. Please contact `support@onify.co` for more info.
 
 ## Installation
 
