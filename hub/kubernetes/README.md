@@ -59,6 +59,17 @@ And set the `tls` variable in the `.tf` file:
 tls = "onify-custom"
 ```
 
+## Helix
+Helix is default true but can be disabled with `helix = false`
+in the `.tf` file.
+
+#### Helix path
+Helix path is default `/helix` but can be changed with `helix_path` in the `.tf` file.
+
+## Ingress
+Ingress is default true but can be disabled with `ingress = false` in the `.tf` file.
+
+
 ## Troubleshooting
 
 ### kubeconfig
@@ -72,3 +83,4 @@ Use port forwarding to test the app and login with username and password.
 ```bash
 kubectl port-forward --address localhost pod/onify-app-0 3000:3000 -n onify-{CLIENT CODE}-{INSTANCE CODE}
 ```
+

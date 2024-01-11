@@ -28,16 +28,16 @@ variable "onify_api_client_secret" {}
 variable "onify_app_api_admin_token" {}
 
 module "onify-client-instance" {
-  source                 = "github.com/onify/terraform//modules/onify-customer-helix"
+  source                 = "github.com/onify/terraform//modules/onify-customer"
   elasticsearch_external = false
   ghcr_registry_username = var.ghcr_registry_username
   ghcr_registry_password = var.ghcr_registry_password
   gcr_registry_keyfile   = "./keyfile.json"
   elasticsearch_heapsize = "1g" # The more the better
-  external-dns-domain    = "onify.net"
+  external_dns_domain    = "onify.net"
   custom_hostname        = ["dev"] # Array of domain names
-  onify-helix_image      = "ghcr.io/onify/helix-app-lab:latest"
-  onify_api_envs = {
+  onify_helix_image      = "ghcr.io/onify/helix-app-lab:latest"
+  onify_hub_api_envs = {
     #DEBUG                              = "bpmn-engine:error*" # See https://support.onify.co/discuss/65251b6009eaa20a104adba2
     NODE_ENV                           = "production"
     ENV_PREFIX                         = "ONIFY_"
@@ -59,7 +59,7 @@ module "onify-client-instance" {
     ONIFY_logging_log                  = "stdout" # Or "stdout,elastic"
     #ONIFY_logging_elasticFlushInterval = "500"
   }
-  onify_app_envs = {
+  onify_hub_app_envs = {
     NODE_ENV                    = "production"
     ENV_PREFIX                  = "ONIFY_"
     INTERPRET_CHAR_AS_DOT       = "_"
