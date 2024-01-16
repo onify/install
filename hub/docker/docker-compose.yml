@@ -7,7 +7,7 @@ x-shared-api-variables: &shared-api-variables
   ONIFY_logging_log: stdout # stdout,elastic
   #ONIFY_db_alwaysRefresh: "true" # For testing purposes
   ONIFY_db_elasticsearch_host: http://linked-elasticsearch:9200
-  ONIFY_db_indexPrefix: dev
+  ONIFY_db_indexPrefix: dev # use "onify" for prod
   ONIFY_client_secret: ${API_CLIENT_SECRET}
   ONIFY_client_code: ${API_CLIENT_CODE} # Contact Onify at support@onify.co for this
   ONIFY_client_instance: ${API_CLIENT_INSTANCE} # Contact Onify at support@onify.co for this
@@ -16,7 +16,7 @@ x-shared-api-variables: &shared-api-variables
   ONIFY_adminUser_password: ${ADMIN_PASSWORD}
   ONIFY_adminUser_email: admin@onify.local
   ONIFY_apiTokens_app_secret: ${API_APP_SECRET}
-  ONIFY_logging_logLevel: debug
+  ONIFY_logging_logLevel: debug # use "info" for prod
   ONIFY_resources_baseDir: ./data/resources
   ONIFY_resources_tempDir: ./data/storage
   ONIFY_websockets_agent_url: ws://linked-agent-server:8080/hub
@@ -98,3 +98,11 @@ services:
     restart: always
     ports:
       - 8282:8282
+# --- IF YOU WANT TO USE ONIFY HELIX, UNCOMMENT THESE LINES ---
+#  helix:
+#    image: ghcr.io/onify/helix-app:latest # IMPORTANT: replace with your custom Helix image
+#    pull_policy: always
+#    restart: always
+#    ports:
+#      - 4000:4000
+# --- IF YOU WANT TO USE ONIFY HELIX, UNCOMMENT THESE LINES ---
