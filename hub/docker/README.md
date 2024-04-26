@@ -39,13 +39,13 @@ Token used to authenticate app backend with api. Generated api token from `API_A
 For OSX or Linux
 ```sh
 source .env
-echo "Bearer $(echo -n "app:$API_APP_SECRET" | base64)"
+echo -n "app:$API_APP_SECRET" | base64
 ```
 
 or Windows (Powershell):
 ```powershell
 $API_APP_SECRET="<Onify hub app secret>"
-"Bearer " + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("app:" + $API_APP_SECRET))
+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("app:" + $API_APP_SECRET))
 ```
 
 Add the result as `APP_API_TOKEN` value in `.env` file where the value is surrounded by quotes.
