@@ -84,3 +84,11 @@ Use port forwarding to test the app and login with username and password.
 kubectl port-forward --address localhost pod/onify-app-0 3000:3000 -n onify-{CLIENT CODE}-{INSTANCE CODE}
 ```
 
+### Access denied in Elasticsearch
+
+Sometimes you will end up with a `access denied` error in the Elasticsearch logs related to the folder to store data.
+This is often related to access and can be fixed using this command:
+
+```
+chown -R 1000:2000 /usr/share/elasticsearch/data
+```
